@@ -32,6 +32,12 @@ type ToolTipProps = {
   children?: ReactNode
 }
 
+const enum kToolTipState {
+  Hidden,
+  Shown,
+  FadingOut
+}
+
 const
   kArrowWidth = 16,
   kArrowHeight = 8,
@@ -51,9 +57,7 @@ export function ToolTip({
 }: ToolTipProps) {
   const tipID = useId()
 
-  const
-    [shown, setShown] = useState(false),
-    [fadingOut, setFadingOut] = useState(false)
+  const [state, setState] = useState(kToolTipState.Hidden)
 
   const
     [tipElement, setTipElement] = useState<HTMLElement | null>(null),
@@ -190,14 +194,24 @@ export function ToolTip({
 
   const onAnimationEnd: AnimationEventHandler<HTMLDivElement> = e => {
     if (e.animationName === 'ToolTipLayer-fade-out') {
-      setFadingOut(false)
-      setShown(false)
+      setState(kToolTipState.Hidden)
     }
+  }
+
+  const onMouseEnter = () => {
+    setState(kToolTipState.Shown)
+  }
+
+  const onMouseLeave = () => {
+    setState(kToolTipState.FadingOut)
   }
 
   const renderedToolTipElement = useMemo(() => (
     <div
-      className={classNames('ToolTipLayer', { 'fade-out': fadingOut })}
+      className={classNames(
+        'ToolTipLayer',
+        { 'fade-out': state === kToolTipState.FadingOut }
+      )}
       onAnimationEnd={onAnimationEnd}
     >
       <div
@@ -220,31 +234,15 @@ export function ToolTip({
         ref={node => setTipElement(node)}
       >{children}</div>
     </div>
-  ), [
-    fadingOut,
-    arrowPosition,
-    arrowLeft,
-    arrowTop,
-    left,
-    top,
-    width,
-    children
-  ])
-
-  useEffect(() => {
-    console.log({ shown, fadingOut })
-  }, [shown, fadingOut])
+  ), [state, arrowPosition, arrowLeft, arrowTop, left, top, width, children])
 
   return createElement(
     'div',
     {
       className: classNames('ToolTip', className),
       ref: node => setAreaElement(node),
-      onMouseEnter: () => setShown(true),
-      onMouseLeave: () => {
-        setShown(true)
-        setFadingOut(true)
-      },
+      onMouseEnter,
+      onMouseLeave,
       style: {
         left: areaLeft,
         top: areaTop,
@@ -252,7 +250,7 @@ export function ToolTip({
         bottom: areaBottom
       }
     },
-    (shown && children)
+    (state !== kToolTipState.Hidden && children)
       ? createPortal(renderedToolTipElement, document.body, `ToolTip-${tipID}`)
       : null
   )

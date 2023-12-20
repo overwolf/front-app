@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import { classNames } from '../../utils'
 
 import './Tip.scss'
+import { delay } from 'ow-libs'
 
 
 type HorizontalPosition =
@@ -32,6 +33,12 @@ type TipProps = {
   children?: ReactNode
 }
 
+const enum kTipState {
+  Hidden,
+  Shown,
+  FadingOut
+}
+
 const
   kArrowWidth = 16,
   kArrowHeight = 8,
@@ -52,8 +59,8 @@ export function Tip({
   const tipID = useId()
 
   const
-    [shown, setShown] = useState(false),
-    [fadingOut, setFadingOut] = useState(false)
+    [mouseOver, setMouseOver] = useState(false),
+    [state, setState] = useState(kTipState.Hidden)
 
   const
     [tipElement, setTipElement] = useState<HTMLElement | null>(null),
@@ -190,22 +197,37 @@ export function Tip({
 
   const onAnimationEnd: AnimationEventHandler<HTMLDivElement> = e => {
     if (e.animationName === 'TipLayer-fade-out') {
-      setFadingOut(false)
-      setShown(false)
+      setState(kTipState.Hidden)
     }
   }
 
-  const onClick = (e: React.MouseEvent) => {
-    if (shown) {
-      setFadingOut(true)
-    } else {
-      setShown(true)
-    }
+  /* const onClick = () => {
+    setState(v => {
+      switch (v) {
+        case kTipState.Hidden:
+          return kTipState.Shown
+        case kTipState.Shown:
+          return kTipState.FadingOut
+        case kTipState.FadingOut:
+          return kTipState.FadingOut
+      }
+    })
+  } */
+
+  const onMouseEnter = () => {
+    setMouseOver(true)
+  }
+
+  const onMouseLeave = () => {
+    setMouseOver(false)
   }
 
   const renderedTipElement = useMemo(() => (
     <div
-      className={classNames('TipLayer', { 'fade-out': fadingOut })}
+      className={classNames(
+        'TipLayer',
+        { 'fade-out': state === kTipState.FadingOut }
+      )}
       onAnimationEnd={onAnimationEnd}
     >
       <div
@@ -220,6 +242,8 @@ export function Tip({
       />
       <div
         className="content"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         style={{
           left: `${left}px`,
           top: `${top}px`,
@@ -228,19 +252,32 @@ export function Tip({
         ref={node => setTipElement(node)}
       >{children}</div>
     </div>
-  ), [
-    fadingOut,
-    arrowPosition,
-    arrowLeft,
-    arrowTop,
-    left,
-    top,
-    width,
-    children
-  ])
+  ), [state, arrowPosition, arrowLeft, arrowTop, left, top, width, children])
 
   useEffect(() => {
-    if (!shown || !areaElement) {
+    let cancelled = false
+
+    const timeout = mouseOver ? 250 : 500
+
+    delay(timeout).then(() => {
+      if (cancelled) {
+        return
+      }
+
+      if (mouseOver) {
+        setState(kTipState.Shown)
+      } else {
+        setState(kTipState.FadingOut)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [mouseOver])
+
+  useEffect(() => {
+    if (state !== kTipState.Shown || !areaElement) {
       return
     }
 
@@ -250,7 +287,7 @@ export function Tip({
         areaElement !== e.target &&
         !areaElement.contains(e.target as Node)
       ) {
-        setFadingOut(true)
+        setState(kTipState.FadingOut)
       }
     }
 
@@ -259,13 +296,15 @@ export function Tip({
     return () => {
       document.removeEventListener('click', onClickOutside)
     }
-  }, [areaElement, shown])
+  }, [areaElement, state])
 
   return createElement(
     'div',
     {
       className: classNames('Tip', className),
-      onClick,
+      // onClick,
+      onMouseEnter,
+      onMouseLeave,
       ref: node => setAreaElement(node),
       style: {
         left: areaLeft,
@@ -274,7 +313,7 @@ export function Tip({
         bottom: areaBottom
       }
     },
-    (shown && children)
+    (state !== kTipState.Hidden && children)
       ? createPortal(renderedTipElement, document.body, `Tip-${tipID}`)
       : null
   )
