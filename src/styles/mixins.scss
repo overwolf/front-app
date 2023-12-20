@@ -1,0 +1,40 @@
+@mixin scrollable($overflowRule: auto) {
+  overflow-x: hidden;
+  overflow-y: $overflowRule;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--surface-surface-tertiary);
+
+    &:hover {
+      background: var(--surface-surface-quaternary);
+    }
+  }
+}
+
+@mixin desktopPrimary() {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 430px;
+  bottom: 15px;
+  padding: 20px 24px;
+  background: var(--surface-surface-secondary);
+}
+
+@mixin desktopSecondary() {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 400px;
+  height: 238px;
+  padding: 20px 24px;
+
+  background: var(--surface-surface-secondary);
+  color: var(--text-text-primary);
+}

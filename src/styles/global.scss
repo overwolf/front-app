@@ -1,0 +1,152 @@
+// Variables
+
+:root {
+  --text-text-primary: #DFDFDF;
+  --text-text-secondary: #DFDFDF;
+  --text-text-tertiary: #BFBFBF;
+  --dev-console-codes-texts-primary-text-color: #CCC;
+  --surface-surface-brand: #D34037;
+  --surface-surface-primary: #202020;
+  --surface-surface-secondary: #303030;
+  --surface-surface-tertiary: #404040;
+  --surface-surface-quaternary: #505050;
+  --surface-surface-tooltip: #606060;
+  --icon-icon-primary: #DFDFDF;
+  --icon-icon-secondary: #9F9F9F;
+  --border-border-secondary: #9F9F9F;
+  --border-border-tertiary: #606060;
+  --border-border-quaternary: #303030;
+  --hover-hover-secondary-dark: rgba(255, 255, 255, 0.08);
+  --hover-hover-tertiary: #505050;
+  --hover-hover-quaternary: #606060;
+  --surface-surface-pure: #000;
+  --surface-surface-tooltip: #606060;
+  --dev-console-codes-primary-primary-color: var(--surface-surface-brand);
+  --dev-console-codes-surfaces-pure-surface-color: #000;
+  --status-normal: #32A912;
+  --status-warning: #E07000;
+  --status-error: #FC3737;
+  --window-icon-pure: #FFF;
+  --window-icon-primary: #DFDFDF;
+  --window-icon-secondary: #BFBFBF;
+}
+
+// Fonts
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+// Reset
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  vertical-align: baseline;
+  color: inherit;
+  background: transparent;
+  background-repeat: no-repeat;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+// Misc tag styling
+
+strong,
+b {
+  font-weight: 700;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+input[type=submit],
+button {
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+textarea {
+  resize: none;
+}
+
+symbol,
+use,
+svg {
+  overflow: visible;
+  -webkit-user-drag: none;
+}
+
+svg {
+  display: block;
+}
+
+img {
+  display: block;
+  -webkit-user-drag: none;
+}
+
+button {
+  display: block;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+html,
+body {
+  overflow: hidden;
+  user-select: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus {
+  outline: 0;
+}
+
+::selection {
+  color: var(--text-text-primary);
+  background-color: var(--dev-console-codes-surfaces-pure-surface-color);
+  text-shadow: none;
+}
+
+::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+// Global
+
+body {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  line-height: 24px;
+  color: var(--text-text-primary);
+  font-family: Lato, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.32px;
+}
+
+// Generic styles

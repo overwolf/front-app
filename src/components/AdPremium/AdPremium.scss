@@ -1,0 +1,35 @@
+.AdPremium {
+  position: relative;
+
+  .premium {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    p {
+      margin-left: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: .56px;
+    }
+
+    .go-premium {
+      position: relative;
+      min-height: 32px;
+      padding: 0 36px 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      letter-spacing: .56px;
+      text-transform: uppercase;
+      background-color: var(--surface-surface-tertiary);
+      transition: background-color 150ms ease-in-out;
+
+      &:hover {
+        background-color: var(--surface-surface-quaternary);
+      }
+    }
+  }
+}

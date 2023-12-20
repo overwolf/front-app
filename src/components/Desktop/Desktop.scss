@@ -1,0 +1,66 @@
+.Desktop {
+  position: relative;
+  height: 100vh;
+  background: var(--surface-surface-pure);
+
+  .Navigation {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    bottom: 0;
+  }
+
+  .desktop-screen {
+    position: absolute;
+    top: 30px;
+    left: 116px;
+    right: 0;
+    bottom: 0;
+  }
+
+  .desktop-screen-fade {
+    &-enter {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+
+    &-exit {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-enter-active {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-exit-active {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+
+    &-enter-active,
+    &-exit-active {
+      transition:
+        opacity 150ms ease-in-out,
+        transform 150ms ease-in-out;
+    }
+  }
+
+  .desktop-toaster {
+    position: absolute;
+    left: 130px;
+    right: 430px;
+    bottom: 40px;
+    margin: auto;
+    width: 410px;
+    z-index: 10;
+  }
+
+  .desktop-ad-premium {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    z-index: 2;
+  }
+}

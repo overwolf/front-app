@@ -1,0 +1,125 @@
+@use '../../styles/mixins.scss';
+
+.ScreenB {
+  .primary {
+    @include mixins.desktopPrimary;
+    padding-top: 20px;
+
+    h2 {
+      position: relative;
+      margin-bottom: 4px;
+      margin-left: 4px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 28px;
+      letter-spacing: 0.44px;
+    }
+
+    h3 {
+      position: relative;
+      margin-left: 4px;
+      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: 0.36px;
+    }
+
+    p {
+      margin-bottom: 16px;
+      margin-left: 4px;
+      color: var(--text-text-secondary, #BFBFBF);
+      font-family: Lato;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .player {
+      margin: 0 auto 16px;
+      background: var(--surface-surface-tertiary, #404040);
+    }
+
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      align-self: stretch;
+    }
+
+    .player-control {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface-surface-tertiary) center center no-repeat;
+
+      &.player-prev {
+        background-image: url('../../images/player-prev.svg');
+        background-size: 24px;
+      }
+
+      &.player-play {
+        width: 48px;
+        height: 48px;
+        background-image: url('../../images/player-play.svg');
+        background-size: 24px;
+      }
+
+      &.player-next {
+        background-image: url('../../images/player-next.svg');
+        background-size: 24px;
+      }
+    }
+  }
+
+  .secondary {
+    @include mixins.desktopSecondary;
+    padding: 20px 0 0 24px;
+
+    h3 {
+      color: var(--text-text-primary, #DFDFDF);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: 0.36px;
+    }
+
+    .events-header {
+      width: calc(100% - 24px);
+      table-layout: fixed;
+      border-spacing: 0;
+      text-align: center;
+      border-bottom: 1px solid var(--border-border-tertiary);
+
+      img {
+        margin: auto
+      }
+
+      td {
+        padding: 12px;
+      }
+    }
+
+    .events-container {
+      height: calc(100% - 73px);
+      padding-right: 18px;
+      @include mixins.scrollable;
+    }
+
+    .events {
+      width: 100%;
+      table-layout: fixed;
+      border-spacing: 0;
+
+      line-height: 20px;
+      color: var(--text-text-primary, #DFDFDF);
+      font-size: 14px;
+      letter-spacing: 0.56px;
+      text-align: center;
+
+      td {
+        padding: 8px 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+@use '../../styles/mixins.scss';
+
+.Premium {
+  .primary {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    @include mixins.desktopPrimary;
+
+    h2 {
+      position: relative;
+      flex: 0 0 auto;
+      margin-bottom: 40px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 28px;
+      letter-spacing: 0.44px;
+    }
+  }
+
+  .select-billing {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    gap: 24px;
+
+    .billed {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.32px;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 20px;
+        height: 20px;
+        background: url('../../images/radio.svg') no-repeat center center;
+        transition: background-image 150ms ease-in-out;
+      }
+
+      &.active::before {
+        background-image: url('../../images/radio-active.svg');
+      }
+    }
+  }
+
+  .plans {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+  }
+
+  .plan {
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--surface-surface-tertiary);
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: 0.36px;
+      text-align: center;
+    }
+
+    button {
+      min-width: 96px;
+      height: 32px;
+      padding: 6px 16px;
+      border: 1px solid var(--border-border-secondary);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      letter-spacing: 0.56px;
+    }
+  }
+
+  .secondary {
+    @include mixins.desktopSecondary;
+
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.36px;
+  }
+}

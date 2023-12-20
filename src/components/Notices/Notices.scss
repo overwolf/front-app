@@ -1,0 +1,38 @@
+.Notices {
+  display: flex;
+  position: relative;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 15px;
+  height: 100vh;
+
+  .notice-fade {
+    &-enter {
+      opacity: 0;
+      transform: scale(.8);
+    }
+
+    &-exit {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-enter-active {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-exit-active {
+      opacity: 0;
+      transform: scale(.8);
+    }
+
+    &-enter-active,
+    &-exit-active {
+      transition:
+        opacity 300ms ease-in-out,
+        transform 300ms ease-in-out;
+    }
+  }
+}

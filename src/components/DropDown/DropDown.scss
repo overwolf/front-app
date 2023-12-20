@@ -1,0 +1,110 @@
+@use '../../styles/mixins.scss';
+
+.DropDown {
+  position: relative;
+  width: 200px;
+  height: 32px;
+  line-height: 30px;
+  color: var(--text-text-tertiary);
+  font-size: 14px;
+  letter-spacing: 0.56px;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    width: 30px;
+    background: url('../../images/dropdown-arrow.svg') center center no-repeat;
+    transition: transform .15s ease-in-out;
+    pointer-events: none;
+  }
+
+  &.open:after {
+    transform: rotate(180deg);
+  }
+
+  .selected {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0 9px;
+    border: 1px solid var(--border-border-tertiary);
+    background: var(--surface-surface-secondary);
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+
+    &:hover {
+      color: var(--text-text-primary);
+      background: var(--hover-hover-secondary-dark);
+    }
+  }
+
+  .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    transform-origin: 0 0;
+    border: 1px solid var(--border-border-tertiary, #606060);
+    background: var(--surface-surface-tertiary, #404040);
+
+    &-enter {
+      opacity: 0;
+      transform: scaleY(0.5);
+    }
+
+    &-enter-active {
+      opacity: 1;
+      transform: scaleY(1);
+      transition:
+        opacity 100ms ease-in-out,
+        transform 100ms ease-in-out;
+    }
+
+    &-exit {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    &-exit-active {
+      opacity: 0;
+      transform: scaleY(0.5);
+      transition:
+        opacity 100ms ease-in-out,
+        transform 100ms ease-in-out;
+    }
+  }
+
+  .option {
+    display: block;
+    width: 100%;
+    position: relative;
+    padding: 0 9px;
+    line-height: 30px;
+    cursor: pointer;
+    transition:
+      color .15s ease-in-out,
+      background-color .15s ease-in-out;
+
+    &:hover {
+      color: var(--text-text-primary);
+      background: var(--hover-hover-secondary-dark);
+    }
+
+    &.chosen {
+      background: url('../../images/check.svg') right 9px center no-repeat;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #58595B;
+    }
+  }
+}

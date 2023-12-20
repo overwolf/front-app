@@ -1,0 +1,72 @@
+.Toaster {
+  pointer-events: none;
+}
+
+.ToastItem {
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  background: var(--surface-surface-quaternary);
+  transform-origin: center top;
+  pointer-events: all;
+
+  &.toast-success::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    background-color: var(--window-icon-primary);
+    mask: url('../../images/checkbox-check.svg') no-repeat center center;
+    mask-size: contain;
+  }
+
+  &-enter {
+    opacity: 0;
+    transform: scale(.5);
+  }
+
+  &-exit {
+    opacity: 1;
+    transform: none;
+  }
+
+  &-enter-active {
+    opacity: 1;
+    transform: none;
+  }
+
+  &-exit-active {
+    opacity: 0;
+    transform: scale(.5);
+  }
+
+  &-enter-active,
+  &-exit-active {
+    transition:
+      opacity .3s ease-in-out,
+      transform .3s ease-in-out;
+  }
+
+  .message {
+    flex: 1 1 auto;
+    margin-right: auto;
+    color: var(--text-text-primary);
+    letter-spacing: 0.32px;
+  }
+
+  .close {
+    flex: 0 0 auto;
+    margin-left: 40px;
+    width: 30px;
+    height: 30px;
+    mask: url('../../images/window-close.svg') no-repeat center center;
+    mask-size: 20px;
+    background-color: var(--window-icon-primary);
+    transition: background-color .15s ease-in-out;
+
+    &:hover {
+      background-color: var(--window-icon-pure);
+    }
+  }
+}

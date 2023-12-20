@@ -1,0 +1,81 @@
+.SingleNotice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  margin-left: auto;
+  width: 411px;
+  min-height: 90px;
+  padding: 10px 30px 10px 112px;
+  background: var(--surface-surface-tertiary);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 40px;
+    bottom: 0;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    background: url('../../images/braces.svg') center center no-repeat;
+    background-size: contain;
+  }
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    background: var(--icon-icon-secondary);
+    mask: url('../../images/window-close.svg') center center no-repeat;
+    mask-size: 20px;
+    cursor: pointer;
+  }
+
+  .text {
+    display: flex;
+    align-items: center;
+
+    &.icon::before {
+      content: '';
+      display: block;
+      flex: 0 0 auto;
+      margin-right: 8px;
+      width: 30px;
+      height: 30px;
+      mask: url('../../images/status.svg') center center no-repeat;
+      mask-size: contain;
+      background-color: var(--text-text-primary);
+    }
+
+    &.icon-warning::before {
+      background-color: var(--status-warning);
+    }
+
+    &.icon-error::before {
+      background-color: var(--status-error);
+    }
+  }
+
+  .action {
+    height: 32px;
+    padding: 5px 15px;
+    border: 1px solid var(--border-border-secondary);
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.56px;
+    text-align: center;
+    transition: background-color 150ms ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-hover-secondary-dark);
+    }
+  }
+}

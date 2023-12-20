@@ -1,0 +1,65 @@
+.Ingame {
+  position: relative;
+  height: 100vh;
+  background: var(--surface-surface-pure);
+
+  .ingame-screen {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .ingame-primary {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 430px;
+    bottom: 15px;
+    padding: 20px 24px;
+    background: var(--surface-surface-secondary);
+
+    h2 {
+      position: relative;
+      color: var(--text-text-primary, #DFDFDF);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 28px;
+      letter-spacing: 0.44px;
+    }
+  }
+
+  .ingame-secondary {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 400px;
+    bottom: 330px;
+    padding: 20px 24px;
+
+    background: var(--surface-surface-secondary);
+    color: var(--text-text-primary);
+
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.36px;
+  }
+
+  .ingame-ad {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .ingame-toaster {
+    position: absolute;
+    left: 15px;
+    right: 430px;
+    bottom: 40px;
+    margin: auto;
+    width: 410px;
+    z-index: 10;
+  }
+}

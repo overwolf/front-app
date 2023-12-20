@@ -1,0 +1,52 @@
+@use '../../styles/mixins.scss';
+
+.ScreenError {
+  .primary {
+    @include mixins.desktopPrimary;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 28px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.44px;
+    text-align: center;
+
+    &::before {
+      content: '';
+      display: block;
+      margin-bottom: 35px;
+      width: 128px;
+      height: 128px;
+      background: url('../../images/error.svg') no-repeat center center;
+      background-size: contain;
+    }
+  }
+
+  .secondary {
+    @include mixins.desktopSecondary;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 24px;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+
+    &::before {
+      content: '';
+      display: block;
+      margin-bottom: 24px;
+      width: 150px;
+      height: 90px;
+      background: url('../../images/generic-logo.svg') no-repeat center center;
+      background-size: contain;
+    }
+  }
+}

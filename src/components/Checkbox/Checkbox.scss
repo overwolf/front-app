@@ -1,0 +1,40 @@
+.Checkbox {
+  display: flex;
+  justify-items: flex-start;
+  align-items: center;
+  cursor: pointer;
+
+  &.disabled {
+    cursor: inherit;
+  }
+
+  .checkbox-switch {
+    position: relative;
+    display: block;
+    margin-right: 12px;
+    width: 24px;
+    height: 24px;
+    contain: strict;
+    border: 2px solid var(--border-border-tertiary, #606060);
+    background: center center no-repeat;
+    cursor: inherit;
+    transition: all 150ms ease-in-out;
+  }
+
+  &:not(.disabled) {
+    &:hover .checkbox-switch {
+      border-color: var(--Dev-Console-Codes-Borders---primary-border-color, #CCC);
+      background-color: var(--Dev-Console-Codes-Hovers---secondary-hover-color, rgba(255, 255, 255, 0.16));
+    }
+
+    &.on .checkbox-switch {
+      border-color: var(--surface-surface-brand);
+      background-color: var(--surface-surface-brand);
+      background-image: url('../../images/checkbox-check.svg');
+    }
+  }
+
+  &.disabled .checkbox-switch {
+    opacity: .4;
+  }
+}

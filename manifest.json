@@ -1,0 +1,287 @@
+{
+  "manifest_version": 1,
+  "type": "WebApp",
+  "meta": {
+    "name": "Front App",
+    "description": "",
+    "version": "0.0.0",
+    "minimum-overwolf-version": "0.165.0",
+    "author": "Overwolf",
+    "icon": "assets-static/dock.png",
+    "icon_gray": "assets-static/dock-gray.png",
+    "launcher_icon": "assets-static/launcher.ico",
+    "window_icon": "assets-static/dock.png"
+  },
+  "permissions": [
+    "Extensions",
+    "Streaming",
+    "GameInfo",
+    "Profile",
+    "Hotkeys",
+    "DesktopStreaming",
+    "FileSystem",
+    "Clipboard"
+  ],
+  "data": {
+    "force_browser": "user",
+    "start_window": "background",
+    "protocol_override_domains": {
+      "googlesyndication": "http"
+    },
+    "hotkeys": {
+      "toggle-front-app": {
+        "title": "Show/Hide Front App",
+        "action-type": "toggle",
+        "default": "Ctrl+T"
+      }
+    },
+    "windows": {
+      "background": {
+        "file": "background.html",
+        "is_background_page": true,
+        "background_optimization": false
+      },
+      "desktop": {
+        "file": "desktop.html",
+        "transparent": true,
+        "resizable": false,
+        "show_in_taskbar": true,
+        "desktop_only": true,
+        "native_window": true,
+        "keep_window_location": true,
+        "override_on_update": true,
+        "block_top_window_navigation": true,
+        "popup_blocker": true,
+        "mute": true,
+        "size": {
+          "width": 1212,
+          "height": 660
+        },
+        "start_position": {
+          "top": 200,
+          "left": 200
+        }
+      },
+      "loading": {
+        "file": "loading.html",
+        "transparent": true,
+        "resizable": false,
+        "in_game_only": true,
+        "show_in_taskbar": false,
+        "keep_window_location": true,
+        "override_on_update": true,
+        "block_top_window_navigation": true,
+        "popup_blocker": true,
+        "mute": true,
+        "size": {
+          "width": 480,
+          "height": 600
+        },
+        "start_position": {
+          "top": 400,
+          "left": 200
+        }
+      },
+      "ingame": {
+        "file": "ingame.html",
+        "transparent": true,
+        "resizable": false,
+        "in_game_only": true,
+        "show_in_taskbar": false,
+        "keep_window_location": true,
+        "override_on_update": true,
+        "block_top_window_navigation": true,
+        "popup_blocker": true,
+        "mute": true,
+        "size": {
+          "width": 1212,
+          "height": 660
+        },
+        "start_position": {
+          "top": 200,
+          "left": 200
+        }
+      },
+      "notices": {
+        "file": "notices.html",
+        "transparent": true,
+        "resizable": false,
+        "topmost": true,
+        "show_in_taskbar": false,
+        "grab_focus_on_desktop": false,
+        "keep_window_location": true,
+        "override_on_update": true,
+        "size": {
+          "width": 500,
+          "height": 800
+        },
+        "start_position": {
+          "top": 10,
+          "left": 10
+        }
+      }
+    },
+    "launch_events": [
+      {
+        "event": "GameLaunch",
+        "event_data": {
+          "game_ids": [
+            10878,
+            7764,
+            7314,
+            21216,
+            5426,
+            10844,
+            10906,
+            10798,
+            6365,
+            9898,
+            10746,
+            10826,
+            21404,
+            10902,
+            21566,
+            21570,
+            10624,
+            21308,
+            5855,
+            7212,
+            21620,
+            765,
+            21634,
+            21640,
+            8032,
+            8954,
+            21626,
+            6350,
+            21668,
+            21666,
+            21816,
+            21672,
+            21856,
+            21854,
+            21328,
+            21876,
+            21960,
+            21848,
+            215701,
+            21586,
+            21864,
+            22638,
+            22312,
+            22700,
+            22848,
+            21556,
+            215561,
+            22730
+          ],
+          "wait_for_stable_framerate": 15
+        },
+        "start_minimized": true
+      }
+    ],
+    "game_events": [
+      10878,
+      7764,
+      7314,
+      21216,
+      5426,
+      10844,
+      10906,
+      10798,
+      6365,
+      9898,
+      10746,
+      10826,
+      21404,
+      10902,
+      21566,
+      21570,
+      10624,
+      21308,
+      5855,
+      7212,
+      21620,
+      765,
+      21634,
+      21640,
+      8032,
+      8954,
+      21626,
+      6350,
+      21668,
+      21666,
+      21816,
+      21672,
+      21856,
+      21854,
+      21328,
+      21876,
+      21960,
+      21848,
+      215701,
+      21586,
+      21864,
+      22638,
+      22312,
+      22700,
+      22848,
+      21556,
+      215561,
+      22730
+    ],
+    "game_targeting": {
+      "type": "dedicated",
+      "game_ids": [
+        10878,
+        7764,
+        7314,
+        21216,
+        5426,
+        10844,
+        10906,
+        10798,
+        6365,
+        9898,
+        10746,
+        10826,
+        21404,
+        10902,
+        21566,
+        21570,
+        10624,
+        21308,
+        5855,
+        7212,
+        21620,
+        765,
+        21634,
+        21640,
+        8032,
+        8954,
+        21626,
+        6350,
+        21668,
+        21666,
+        21816,
+        21672,
+        21856,
+        21854,
+        21328,
+        21876,
+        21960,
+        21848,
+        215701,
+        21586,
+        21864,
+        22638,
+        22312,
+        22700,
+        22848,
+        21556,
+        215561,
+        22730
+      ]
+    }
+  }
+}

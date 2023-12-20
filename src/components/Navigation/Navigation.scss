@@ -1,0 +1,199 @@
+.Navigation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 116px;
+  padding-top: 19px;
+  background: var(--surface-surface-primary, #202020);
+
+  .menu-item {
+    position: relative;
+    margin-bottom: 30px;
+    width: 100%;
+    padding-left: 60px;
+    padding-top: 1px;
+    line-height: 34px;
+    height: 35px;
+    font-size: 15px;
+    cursor: pointer;
+
+    &:before,
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 17px;
+      width: 35px;
+      height: 35px;
+    }
+
+    &:before {
+      background: #525252;
+      border: 1px solid #525252;
+      border-radius: 50%;
+      transition: .15s ease-in-out border-color;
+    }
+
+    &.selected:before {
+      border-color: #D6D6D6;
+    }
+
+    &:after {
+      mask: center center no-repeat;
+      background: #949494;
+      transition: .15s ease-in-out background;
+    }
+
+    &.menu-main:after {
+      mask-image: url('../../images/nav-home.svg');
+    }
+
+    &.menu-a:after {
+      mask-image: url('../../images/nav-a.svg');
+    }
+
+    &.menu-b:after {
+      mask-image: url('../../images/nav-b.svg');
+    }
+
+    &.selected:after,
+    &:hover:after {
+      background: #D6D6D6;
+    }
+  }
+
+  .menu-secondary {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 1px;
+    width: 100%;
+    min-height: 64px;
+    padding: 10px 12px;
+    line-height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-hover-secondary-dark);
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+      background: var(--icon-icon-secondary);
+      mask: url('../../images/settings.svg') center center no-repeat;
+      mask-size: contain;
+    }
+
+    +.menu-secondary:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: -1px;
+      left: 12px;
+      right: 12px;
+      height: 1px;
+      background: var(--border-border-quaternary);
+    }
+  }
+
+  .menu-premium {
+    margin-top: auto;
+
+    &::before {
+      mask-image: url('../../images/premium.svg');
+    }
+  }
+
+  .menu-status {
+    &::before {
+      background: var(--status-normal);
+      mask-image: url('../../images/status-select.svg');
+    }
+
+    &.status-warning::before {
+      background: var(--status-warning);
+    }
+
+    &.status-error::before {
+      background: var(--status-error);
+    }
+  }
+
+  .menu-settings {
+    &::before {
+      mask-image: url('../../images/settings.svg');
+    }
+  }
+
+  .status-popup {
+    position: absolute;
+    left: 100%;
+    bottom: 0;
+    z-index: 2;
+    color: var(--text-text-primary);
+    border: 1px solid var(--border-border-tertiary);
+    background: var(--surface-surface-tertiary);
+
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.32px;
+
+    cursor: pointer;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      visibility 150ms ease-in-out,
+      opacity 150ms ease-in-out;
+  }
+
+  .menu-status:hover .status-popup {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .status-select {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    line-height: 24px;
+    padding: 8px 10px;
+    white-space: nowrap;
+    transition: background-color 150ms ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-hover-quaternary, #505050);
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 20px;
+      background-color: var(--window-icon-pure);
+      mask: url('../../images/status-select.svg') no-repeat center center;
+      mask-size: contain;
+    }
+
+    &.normal::before {
+      background-color: var(--status-normal);
+    }
+
+    &.warning::before {
+      background-color: var(--status-warning);
+    }
+
+    &.error::before {
+      background-color: var(--status-error);
+    }
+  }
+}

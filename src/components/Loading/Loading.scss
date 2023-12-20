@@ -1,0 +1,192 @@
+.Loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 100vh;
+  padding-bottom: 24px;
+  background: var(--surface-surface-pure);
+
+  .loading-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    width: 100%;
+    height: 30px;
+    padding-left: 8px;
+    background: var(--surface-surface-tertiary);
+
+    &::before {
+      content: '';
+      display: block;
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      background: url('../../images/app-logo.svg') no-repeat 0 center;
+      background-size: auto 100%;
+      pointer-events: none;
+    }
+
+    .hotkey {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      margin: auto;
+      width: fit-content;
+      line-height: 30px;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.56px;
+
+      kbd {
+        font-weight: 700;
+      }
+    }
+
+    .window-controls {
+      display: flex;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .window-control {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      transition: background-color 150ms ease-in-out;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        mask: center center no-repeat;
+        mask-size: 20px;
+        background-color: var(--window-icon-secondary);
+        transition: background-color 150ms ease-in-out;
+      }
+
+      &:hover {
+        background-color: var(--hover-hover-secondary-dark);
+
+        &::before {
+          background-color: var(--window-icon-primary);
+        }
+      }
+
+      &.minimize::before {
+        mask-image: url('../../images/window-minimize.svg');
+      }
+
+      &.close {
+        &::before {
+          mask-image: url('../../images/window-close.svg');
+        }
+
+        &:hover {
+          background-color: var(--dev-console-codes-primary-primary-color);
+
+          &::before {
+            background: var(--window-icon-pure);
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    height: 193px;
+    padding: 0 24px;
+    color: var(--text-text-secondary, #BFBFBF);
+    background-color: var(--surface-surface-secondary, #303030);
+    text-align: center;
+
+    h3 {
+      margin-bottom: 4px;
+      line-height: 24px;
+      color: var(--text-text-primary, #DFDFDF);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.36px;
+    }
+
+    p {
+      line-height: 20px;
+      font-size: 14px;
+      letter-spacing: 0.56px;
+    }
+
+    .try-again {
+      margin-top: 12px;
+      height: 32px;
+      line-height: 20px;
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.56px;
+    }
+
+    .link {
+      display: inline-block;
+      color: var(--text-text-primary, #DFDFDF);
+      text-decoration-line: underline;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        margin-right: 2px;
+        width: 20px;
+        height: 20px;
+        mask: url('../../images/discord.svg') no-repeat center center;
+        mask-size: contain;
+        background-color: currentColor;
+      }
+    }
+  }
+
+  .content-loading,
+  .content-ready {
+    justify-content: center;
+
+    h3 {
+      line-height: 28px;
+      font-size: 22px;
+      letter-spacing: 0.44px;
+    }
+
+    p {
+      line-height: 24px;
+      font-size: 16px;
+      letter-spacing: 0.32px;
+    }
+  }
+
+  .content-warning,
+  .content-error {
+    &::before {
+      content: '';
+      display: block;
+      flex: 0 0 auto;
+      margin-bottom: 8px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--status-warning);
+      mask: url('../../images/status.svg') no-repeat center center;
+      mask-size: contain;
+    }
+  }
+
+  .content-error::before {
+    background-color: var(--status-error);
+  }
+
+  .loading-ad {
+    margin-top: auto;
+  }
+}

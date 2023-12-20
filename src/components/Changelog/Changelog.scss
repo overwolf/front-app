@@ -1,0 +1,47 @@
+.Changelog {
+  display: flex;
+  flex-direction: column;
+  min-height: 315px;
+
+  h3 {
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: 0.44px;
+  }
+
+  .content {
+    color: var(--text-text-secondary);
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-top: auto;
+    border-top: 1px solid var(--border-border-quaternary);
+    padding-top: 24px;
+  }
+
+  .action-close {
+    padding: 6px 16px;
+    line-height: 20px;
+    color: var(--text-text-primary);
+    background-color: var(--surface-surface-quaternary);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.56px;
+    transition: background-color 150ms ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-hover-quaternary);
+    }
+  }
+}

@@ -1,0 +1,31 @@
+@use '../../styles/mixins.scss';
+
+.ScreenMain {
+  .primary {
+    @include mixins.desktopPrimary;
+
+    h2 {
+      margin-bottom: 4px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 28px;
+      letter-spacing: 0.44px;
+    }
+
+    p {
+      color: var(--text-text-secondary, #BFBFBF);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+  }
+
+  .secondary {
+    @include mixins.desktopSecondary;
+
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.36px;
+  }
+}
