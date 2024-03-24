@@ -8,11 +8,11 @@
   },
   "license": "MIT",
   "scripts": {
-    "build:dev": "npx webpack --config ./config/webpack.config.ts",
-    "build:watch": "npx webpack --config ./config/webpack.config.ts --watch",
-    "build:prod": "npx webpack --config ./config/webpack.config.ts --env production",
-    "build:prod:opk": "npx webpack --config ./config/webpack.config.ts --env production --env makeOPK",
-    "build:prod:opk:patch": "npx webpack --config ./config/webpack.config.ts --env production --env makeOPK --env version=patch"
+    "build:dev": "yarn webpack --config ./config/webpack.config.ts",
+    "build:watch": "yarn webpack --config ./config/webpack.config.ts --watch",
+    "build:prod": "yarn webpack --config ./config/webpack.config.ts --env production",
+    "build:prod:opk": "yarn webpack --config ./config/webpack.config.ts --env production --env makeOPK",
+    "build:prod:opk:patch": "yarn webpack --config ./config/webpack.config.ts --env production --env makeOPK --env version=patch"
   },
   "dependencies": {
     "ow-libs": "^2.5.0",

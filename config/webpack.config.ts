@@ -126,7 +126,8 @@ export const makeConfig = (env: EnvArg): Configuration => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: 'styles/[name].css'
+        filename: 'styles/[name].css',
+        ignoreOrder: true // This is necessary to avoid an import ordering issue, more on that here - https://github.com/facebook/create-react-app/issues/5372#issuecomment-685932009
       }),
       new OverwolfWebpackPlugin(env),
       ...kWindowNames.map(makeHTMLPlugin)
