@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  gap: 7px;
   position: relative;
   margin-left: auto;
   width: 411px;
@@ -32,26 +33,50 @@
     z-index: 10;
     width: 30px;
     height: 30px;
-    background: var(--icon-icon-secondary);
-    mask: url('../../images/window-close.svg') center center no-repeat;
-    mask-size: 20px;
-    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      mask: url('../../images/window-close.svg') no-repeat center center;
+      mask-size: 20px;
+      background-color: var(--window-icon-secondary);
+      transition: background-color .15s ease-in-out;
+    }
+
+    &:hover {
+      background-color: var(--hover-hover-secondary-dark);
+
+      &::before {
+        background-color: var(--window-icon-primary);
+      }
+    }
   }
 
   .text {
-    display: flex;
-    align-items: center;
+    line-height: 24px;
+    font-size: 16px;
+    letter-spacing: 0.32px;
 
-    &.icon::before {
-      content: '';
-      display: block;
-      flex: 0 0 auto;
-      margin-right: 8px;
-      width: 30px;
-      height: 30px;
-      mask: url('../../images/status.svg') center center no-repeat;
-      mask-size: contain;
-      background-color: var(--text-text-primary);
+    &.icon {
+      position: relative;
+      padding-left: 38px;
+      min-height: 30px;
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        mask: url('../../images/status.svg') center center no-repeat;
+        mask-size: contain;
+        background-color: var(--text-text-primary);
+      }
     }
 
     &.icon-warning::before {
@@ -60,6 +85,12 @@
 
     &.icon-error::before {
       background-color: var(--status-error);
+    }
+
+    kbd,
+    strong,
+    b {
+      font-weight: 700;
     }
   }
 

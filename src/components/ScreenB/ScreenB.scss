@@ -4,39 +4,38 @@
   .primary {
     @include mixins.desktopPrimary;
     padding-top: 20px;
+    padding-bottom: 0;
 
     h2 {
       position: relative;
       margin-bottom: 4px;
-      margin-left: 4px;
+      line-height: 28px;
       font-size: 22px;
       font-weight: 700;
-      line-height: 28px;
       letter-spacing: 0.44px;
     }
 
     h3 {
       position: relative;
-      margin-left: 4px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
+      line-height: 24px;
       font-size: 18px;
       font-weight: 700;
-      line-height: 24px;
       letter-spacing: 0.36px;
     }
 
     p {
-      margin-bottom: 16px;
-      margin-left: 4px;
-      color: var(--text-text-secondary, #BFBFBF);
+      margin-bottom: 18px;
+      line-height: 24px;
+      color: var(--text-text-secondary);
       font-family: Lato;
       font-size: 16px;
-      line-height: 24px;
     }
 
     .player {
-      margin: 0 auto 16px;
-      background: var(--surface-surface-tertiary, #404040);
+      margin-left: -4px;
+      margin-bottom: 16px;
+      background: var(--surface-surface-tertiary);
     }
 
     .player-controls {
@@ -55,19 +54,21 @@
 
       &.player-prev {
         background-image: url('../../images/player-prev.svg');
-        background-size: 24px;
+        background-size: 20px;
+        opacity: .4;
       }
 
       &.player-play {
         width: 48px;
         height: 48px;
         background-image: url('../../images/player-play.svg');
-        background-size: 24px;
+        background-size: 32px;
       }
 
       &.player-next {
         background-image: url('../../images/player-next.svg');
-        background-size: 24px;
+        background-size: 20px;
+        opacity: .4;
       }
     }
   }

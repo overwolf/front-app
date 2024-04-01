@@ -7,6 +7,7 @@
   color: var(--text-text-primary);
   border: 1px solid var(--border-border-tertiary);
   background: var(--surface-surface-secondary);
+  caret-color: var(--surface-surface-brand);
 
   font-size: 14px;
   font-weight: 400;
@@ -19,10 +20,15 @@
 
   contain: paint;
   transition: border-color 150ms ease-in-out;
+  cursor: pointer;
 
   &:hover,
   &.editing {
     border-color: var(--border-border-primary);
+  }
+
+  &.placeholder {
+    color: #9F9F9F;
   }
 
   &.error {

@@ -148,7 +148,7 @@
     position: absolute;
     top: 100%;
     right: 60px;
-    z-index: 10;
+    z-index: 10000001;
     border: 1px solid var(--border-border-tertiary);
     background-color: var(--surface-surface-tertiary);
     visibility: hidden;

@@ -1,6 +1,6 @@
 {
   "name": "front-app",
-  "version": "2.0.0",
+  "version": "2.0.5",
   "description": "",
   "author": {
     "name": "Anton Kulakov",
@@ -12,10 +12,12 @@
     "build:watch": "npx webpack --config ./config/webpack.config.ts --watch",
     "build:prod": "npx webpack --config ./config/webpack.config.ts --env production",
     "build:prod:opk": "npx webpack --config ./config/webpack.config.ts --env production --env makeOPK",
-    "build:prod:opk:patch": "npx webpack --config ./config/webpack.config.ts --env production --env makeOPK --env version=patch"
+    "build:prod:opk:patch": "npx webpack --config ./config/webpack.config.ts --env production --env makeOPK --env setVersion=patch"
   },
   "dependencies": {
-    "ow-libs": "^2.5.0",
+    "@splidejs/react-splide": "^0.7.12",
+    "million": "^2.6.4",
+    "ow-libs": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-transition-group": "^4.4.5"

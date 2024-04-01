@@ -2,10 +2,11 @@ import { kAppScreens } from '../../config/enums'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { classNames } from '../../utils'
 
-import { Ad } from '../Ad/Ad'
-import { Tip } from '../Tip/Tip'
-
 import './AdPremium.scss'
+
+import { Ad } from '../Ad/Ad'
+import { Link } from '../Link/Link'
+import { Tip } from '../Tip/Tip'
 
 
 export type AdPremiumProps = {
@@ -56,9 +57,11 @@ export function AdPremium({ className }: AdPremiumProps) {
             Monetize your app while ensuring a smooth user experience. Here we
             showcase our 400x300 static ad display as a basic option. Ensure the
             ad remains fixed on all screens. For details on various ad layouts
-            and their revenue performance, visit this link. To dive deeper into
-            ad implementation, check out our guide for everything you need to
-            know to start displaying ads in your app.
+            and their revenue performance, visit this&nbsp;
+            <Link url="https://overwolf.github.io/start/monetize-your-app/advertising/recommended-ads-layouts">link</Link>.
+            To dive deeper into ad implementation, check out our&nbsp;
+            <Link url="https://overwolf.github.io/start/monetize-your-app/advertising">guide</Link>&nbsp;
+            for everything you need to know to start displaying ads in your app.
           </p>
         </Tip>
       </Ad>

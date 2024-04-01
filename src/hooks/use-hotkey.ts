@@ -31,9 +31,10 @@ export function useHotkey(hotkeyName: string) {
 
   useEffect(() => {
     const binding = hotkeysService.getHotkeyBinding(hotkeyName)
-      ?? kUnassignedText
 
-    setBinding(binding)
+    console.log('useHotkey', hotkeyName, binding)
+
+    setBinding(binding ?? kUnassignedText)
   }, [hotkeyName])
 
   useEffect(() => {

@@ -7,9 +7,9 @@ import { classNames } from '../../utils'
 import { kNoticeIcons } from '../../config/enums'
 import { kNoticeDefaultTimeout } from '../../config/constants'
 
-import { Tip } from '../Tip/Tip'
-
 import './SingleNotice.scss'
+
+import { Tip } from '../Tip/Tip'
 
 
 export type SingleNoticeProps = {
@@ -33,16 +33,6 @@ export function SingleNotice({ notice, className }: SingleNoticeProps) {
     return ''
   }, [notice.icon])
 
-  const doAction = () => {
-    if (notice.action) {
-      eventBus.emit('noticeAction', notice.action.id)
-    }
-  }
-
-  const closeNotice = useCallback(() => {
-    eventBus.emit('closeNotice', notice.id)
-  }, [eventBus, notice.id])
-
   const tipContent = useMemo(() => {
     if (!notice.devTip) {
       return null
@@ -50,6 +40,36 @@ export function SingleNotice({ notice, className }: SingleNoticeProps) {
 
     return <div dangerouslySetInnerHTML={{ __html: notice.devTip }} />
   }, [notice.devTip])
+
+  const noticeText = useMemo(() => {
+    return (
+      <div
+        className={classNames('text', iconClass)}
+        dangerouslySetInnerHTML={{ __html: notice.message }}
+      />
+    )
+  }, [iconClass, notice.message])
+
+  const closeNotice = useCallback(() => {
+    eventBus.emit('closeNotice', notice.id)
+  }, [eventBus, notice.id])
+
+  const renderAction = useCallback(() => {
+    if (notice.action) {
+      const doAction = () => {
+        if (notice.action) {
+          eventBus.emit('noticeAction', notice.action.id)
+        }
+      }
+
+      return (
+        <button
+          className="action"
+          onClick={doAction}
+        >{notice.action.text}</button>
+      )
+    }
+  }, [eventBus, notice.action])
 
   useEffect(() => {
     if (mouseOver) {
@@ -69,7 +89,7 @@ export function SingleNotice({ notice, className }: SingleNoticeProps) {
     return () => {
       cancelled = true
     }
-  }, [closeNotice, mouseOver, notice.timeout, notice.id])
+  }, [closeNotice, mouseOver, notice.timeout])
 
   return (
     <div
@@ -79,15 +99,9 @@ export function SingleNotice({ notice, className }: SingleNoticeProps) {
     >
       <button className="close" onClick={closeNotice} />
 
-      <div className={classNames('text', iconClass)}>{notice.message}</div>
+      {noticeText}
 
-      {
-        notice.action &&
-        <button
-          className="action"
-          onClick={doAction}
-        >{notice.action.text}</button>
-      }
+      {renderAction()}
 
       {
         notice.devTip &&

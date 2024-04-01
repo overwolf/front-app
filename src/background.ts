@@ -1,17 +1,21 @@
-import { EventEmitter, LauncherStatus, GameStatus, OverwolfWindow, WindowTunnel, log, delay, HotkeyService, HotkeyChangedEvent } from 'ow-libs'
+import { EventEmitter, LauncherStatus, GameStatus, OverwolfWindow, WindowTunnel, log, delay, HotkeyService, HotkeyChangedEvent, GameEvents } from 'ow-libs'
 
-import { kEventBusName, kDiscordUrl, kNoticeWarning, kNoticeError, kNoticeGameModeUnsupported, kNoticeStatsReady, kLeagueLauncherId, kNoticesHeight, kNoticesWidth, kLoadingLeft, kLoadingTop, kHotkey, kHotkeyServiceName, kToastFeedbackSubmitted, kToastBugReportSubmitted } from './config/constants'
+import { kEventBusName, kDiscordUrl, kNoticeWarning, kNoticeError, kNoticeGameModeUnsupported, kNoticeStatsReady, kLeagueLauncherId, kNoticesHeight, kNoticesWidth, kLoadingLeft, kLoadingTop, kHotkeyApp, kHotkeyServiceName, kToastFeedbackSubmitted, kToastBugReportSubmitted, kHotkeyLoading, kGameFeatures, kLeagueGameId, kLoadingWidth, kMainHeight, kMainWidth, kLoadingHeight } from './config/constants'
 import { kWindowNames, kAppStatus, kMatchEndActions } from './config/enums'
 
 import { makeCommonStore } from './store/common'
 import { makePersStore } from './store/pers'
-import { EventBusEvents, Notice, Toast } from './config/types'
+import { EventBusEvents, GameEventTypes, Notice, Toast } from './config/types'
 
 
 class BackgroundController {
   readonly #eventBus = new EventEmitter<EventBusEvents>()
   readonly #launcherStatus = new LauncherStatus()
   readonly #gameStatus = new GameStatus()
+  readonly #gameEvents = new GameEvents<GameEventTypes>(
+    kGameFeatures,
+    this.#gameStatus
+  )
   readonly #hotkey = new HotkeyService()
   readonly #state = makeCommonStore()
   readonly #persState = makePersStore()
@@ -23,14 +27,16 @@ class BackgroundController {
 
   #uid = 0
 
-  get startedWithLauncher() {
+  #isInMatch = false
+
+  get #startedWithLauncher() {
     return (
       window.location.search.includes('source=gamelaunchevent') &&
       window.location.search.includes(`gameid=${kLeagueLauncherId}`)
     )
   }
 
-  get startedWithGame() {
+  get #startedWithGame() {
     return (
       window.location.search.includes('source=gamelaunchevent') &&
       window.location.search.includes('gameid=') &&
@@ -44,7 +50,7 @@ class BackgroundController {
     this.#bindAppShutdown()
 
     overwolf.extensions.current.getManifest(e => {
-      console.log('Front App started app version:', e.meta.version)
+      console.log('Front App app version:', e.meta.version)
       this.#state.version = e.meta.version
     })
 
@@ -57,26 +63,27 @@ class BackgroundController {
       this.#updateViewports()
     ])
 
-    this.#state.hotkey = this.#hotkey.getHotkeyBinding(kHotkey)
+    await this.#initHotkeys()
 
     this.#eventBus.on({
       setStatus: status => this.#state.status = status,
       setScreen: screen => this.#state.screen = screen,
       setPopup: popup => this.#state.popup = popup,
-      dragWindow: windowName => this.dragWindow(windowName),
-      minimizeWindow: windowName => this.minimizeWindow(windowName),
+      dragWindow: windowName => this.#dragWindow(windowName),
+      minimizeWindow: windowName => this.#minimizeWindow(windowName),
       closeWindow: windowName => this.closeWindow(windowName),
       positionWindow: windowName => this.#positionWindow(windowName),
       openLink: url => this.#openLink(url),
-      triggerLaunch: () => this.#openMainWindow(),
       openDiscord: () => this.#openLink(kDiscordUrl),
+      triggerLaunch: () => this.#openMainWindow(),
       closeNotice: id => this.#closeNotice(id),
       closeApp: () => this.#closeApp(),
       tryAgain: () => this.#tryAgain(),
       closeToast: id => this.#closeToast(id),
       submitFeedback: () => this.#submitFeedback(),
       submitBugReport: () => this.#submitBugReport(),
-      setSetting: ([key, value]) => (this.#persState[key] as any) = value
+      setSetting: ([key, value]) => (this.#persState[key] as any) = value,
+      setFTUESeen: () => this.#persState.ftueSeen = true
     })
 
     this.#launcherStatus.addListener('running', () => {
@@ -94,14 +101,19 @@ class BackgroundController {
       pressed: name => this.#onHotkeyPressed(name)
     })
 
-    this.#onGameRunningChanged()
+    this.#onGameRunningChanged(true)
     this.#onLauncherRunningChanged()
 
-    overwolf.windows.onMainWindowRestored.addListener(() => {
-      this.#openMainWindow()
+    overwolf.extensions.onAppLaunchTriggered.addListener(e => {
+      console.log('onAppLaunchTriggered():', ...log(e))
+      this.#openMainWindow(e.origin)
     })
 
-    if (!this.startedWithLauncher && !this.startedWithGame) {
+    if (this.#startedWithLauncher || this.#startedWithGame) {
+      if (!this.#persState.autoLaunch) {
+        await this.#closeApp()
+      }
+    } else {
       console.log('Front App started without game or launcher')
       await this.#openMainWindow()
     }
@@ -125,12 +137,45 @@ class BackgroundController {
     this.#newToast(kToastBugReportSubmitted)
   }
 
+  async #initHotkeys() {
+    this.#state.hotkey = this.#hotkey.getHotkeyBinding(kHotkeyApp)
+    this.#state.hotkeyLoading = this.#hotkey.getHotkeyBinding(kHotkeyLoading)
+
+    if (!this.#state.hotkey) {
+      console.log('setDefaultHotkeys(): assigning default app hotkey')
+
+      await this.#hotkey.assignHotkey({
+        name: kHotkeyApp,
+        virtualKey: 84,
+        modifiers: {
+          ctrl: true
+        }
+      })
+    }
+
+    if (!this.#state.hotkeyLoading) {
+      console.log('setDefaultHotkeys(): assigning default loading hotkey')
+
+      await this.#hotkey.assignHotkey({
+        name: kHotkeyLoading,
+        virtualKey: 84,
+        modifiers: {
+          ctrl: true,
+          shift: true
+        }
+      })
+    }
+  }
+
   #onHotkeyChanged(e: HotkeyChangedEvent) {
     console.log('onHotkeyChanged():', e.name, e.binding)
 
     switch (e.name) {
-      case kHotkey:
+      case kHotkeyApp:
         this.#state.hotkey = e.binding
+        break
+      case kHotkeyLoading:
+        this.#state.hotkeyLoading = e.binding
         break
     }
   }
@@ -139,18 +184,21 @@ class BackgroundController {
     console.log('onHotkeyPressed():', name)
 
     switch (name) {
-      case kHotkey:
+      case kHotkeyApp:
         await this.#openMainWindow('hotkey')
+        break
+      case kHotkeyLoading:
+        await this.#toggleLoadingWindow()
         break
     }
   }
 
-  async #onGameRunningChanged() {
+  async #onGameRunningChanged(firstRun = false) {
     this.#state.gameRunning = this.#gameStatus.isRunning
 
     if (this.#gameStatus.isRunning) {
       await this.#onGameLaunched()
-    } else {
+    } else if (!firstRun) {
       await this.#onGameClosed()
     }
   }
@@ -158,8 +206,8 @@ class BackgroundController {
   async #onLauncherRunningChanged() {
     this.#state.launcherRunning = this.#launcherStatus.isRunning
 
-    if (this.#launcherStatus.isRunning && this.#persState.launcherStart) {
-      await this.#desktopWin.restore()
+    if (this.#launcherStatus.isRunning && this.#persState.autoLaunch) {
+      await this.#openMainWindow()
     }
   }
 
@@ -172,20 +220,50 @@ class BackgroundController {
 
     this.#state.gameRunning = true
 
-    await this.#desktopWin.close()
+    this.#desktopWin.close()
 
-    await this.#onMatchStart()
+    if (this.#gameStatus.gameID === kLeagueGameId) {
+      await this.#onMatchStart()
+    } else {
+      await this.#registerGameEvents()
+      await this.#showGameLaunchNotice()
+    }
   }
 
   async #onGameClosed() {
     console.log('onGameClosed()', this.#gameStatus.gameID)
 
     this.#state.gameRunning = false
+    this.#isInMatch = false
 
-    await this.#ingameWin.close()
-    await this.#loadingWin.close()
+    this.#gameEvents.stop()
 
-    await this.#onMatchEnd()
+    await Promise.all([
+      this.#ingameWin.close(),
+      this.#loadingWin.close()
+    ])
+
+    if (this.#gameStatus.gameID === kLeagueGameId) {
+      await this.#onMatchEnd()
+    }
+  }
+
+  async #registerGameEvents() {
+    if (this.#gameStatus.gameID === kLeagueGameId) {
+      console.log('registerGameEvents(): game is League, skipping')
+      return
+    }
+
+    console.log('registerGameEvents()')
+
+    this.#gameEvents.on({
+      'events.match_start': () => this.#onMatchStart(),
+      'events.match_end': () => this.#onMatchEnd(),
+      'events.matchStart': () => this.#onMatchStart(),
+      'events.matchEnd': () => this.#onMatchEnd()
+    })
+
+    await this.#gameEvents.start()
   }
 
   async #tryAgain() {
@@ -198,32 +276,49 @@ class BackgroundController {
   }
 
   async #onMatchStart() {
-    if (!this.#persState.matchStart) {
+    if (!this.#persState.matchStart || this.#isInMatch) {
       return
     }
 
     console.log('onMatchStart()')
 
-    await this.#loadingWin.restore()
+    this.#isInMatch = true
+
+    await Promise.all([
+      this.#loadingWin.restore(),
+      this.#ingameWin.restore()
+    ])
+
+    await this.#showMatchStartNotice()
 
     this.#state.statsReady = false
 
     await delay(7000)
 
     this.#state.statsReady = true
-
-    await this.#showMatchStartNotice()
   }
 
   async #onMatchEnd() {
+    if (!this.#isInMatch) {
+      return
+    }
+
+    this.#isInMatch = false
+
     console.log('onMatchEnd()')
 
     if (this.#persState.matchEndAction === kMatchEndActions.Show) {
       if (this.#gameStatus.isInFocus) {
-        await this.#desktopWin.restore()
-      } else {
         await this.#ingameWin.restore()
+      } else {
+        await this.#desktopWin.restore()
       }
+    }
+  }
+
+  async #toggleLoadingWindow() {
+    if (this.#gameStatus.isInFocus) {
+      await this.#loadingWin.toggle()
     }
   }
 
@@ -231,20 +326,10 @@ class BackgroundController {
     console.log('openMainWindow()', origin)
 
     if (this.#gameStatus.isInFocus) {
-      if (this.#state.statsReady) {
-        await this.#loadingWin.close()
-
-        if (origin === 'hotkey') {
-          await this.#ingameWin.toggle()
-        } else {
-          await this.#ingameWin.restore()
-        }
+      if (origin === 'hotkey') {
+        await this.#ingameWin.toggle()
       } else {
-        if (origin === 'hotkey') {
-          await this.#loadingWin.toggle()
-        } else {
-          await this.#loadingWin.restore()
-        }
+        await this.#ingameWin.restore()
       }
     } else {
       if (origin === 'hotkey') {
@@ -253,6 +338,21 @@ class BackgroundController {
         await this.#desktopWin.restore()
       }
     }
+  }
+
+  async #showGameLaunchNotice() {
+    if (!this.#persState.notifications) {
+      return
+    }
+
+    await this.#showNotice({
+      id: 'notice-game-launch',
+      message: `App is ready!<br />
+Press <kbd>${this.#state.hotkey}</kbd> to show the app`,
+      devTip: `<h6>Quick Notifications</h6>
+<p>We use notifications to ensure our users are aware of what's happening, or called to act in cases such as recording stopped, in-game stats are ready, a friend logged and more.</p>
+<p>We recommend to auto-terminate quick notifications after a few seconds, especially in games where mouse cursor is hidden (like First Person Shooters).</p>`
+    })
   }
 
   async #showMatchStartNotice() {
@@ -331,10 +431,13 @@ class BackgroundController {
 
   #openLink(url: string) {
     console.log('openLink():', url)
-    overwolf.utils.openUrlInDefaultBrowser(url)
+
+    if (url.startsWith('https://')) {
+      overwolf.utils.openUrlInDefaultBrowser(url)
+    }
   }
 
-  dragWindow(windowName: kWindowNames) {
+  #dragWindow(windowName: kWindowNames) {
     switch (windowName) {
       case kWindowNames.desktop:
         this.#desktopWin.dragMove()
@@ -351,13 +454,16 @@ class BackgroundController {
     }
   }
 
-  minimizeWindow(windowName: kWindowNames) {
+  #minimizeWindow(windowName: kWindowNames) {
     switch (windowName) {
       case kWindowNames.desktop:
         this.#desktopWin.minimize()
         break
       case kWindowNames.ingame:
         this.#ingameWin.minimize()
+        break
+      case kWindowNames.loading:
+        this.#loadingWin.minimize()
         break
       case kWindowNames.notices:
         this.#noticesWin.minimize()
@@ -399,56 +505,54 @@ class BackgroundController {
     }
   }
 
-  #positionDesktopWindow() {
+  async #positionDesktopWindow() {
     const { viewport } = this.#state
     const { desktopPositionedFor } = this.#persState
 
-    if (
-      viewport &&
-      desktopPositionedFor &&
-      viewport.hash === desktopPositionedFor.hash
-    ) {
-      this.#desktopWin.centerInViewport(viewport)
-      this.#persState.desktopPositionedFor = viewport
+    if (!viewport || viewport.hash === desktopPositionedFor?.hash) {
+      return
     }
+
+    await this.#desktopWin.changeSize(kMainWidth, kMainHeight, false)
+    await this.#desktopWin.centerInViewport(viewport)
+
+    this.#persState.desktopPositionedFor = viewport
   }
 
-  #positionIngameWindow() {
+  async #positionIngameWindow() {
     const { viewport } = this.#state
-    const { ingamePositionedFor } = this.#persState
 
-    if (
-      viewport &&
-      ingamePositionedFor &&
-      viewport.hash === ingamePositionedFor.hash
-    ) {
-      this.#ingameWin.centerInViewport(viewport)
-      this.#persState.ingamePositionedFor = viewport
-    }
-  }
-
-  #positionLoadingWindow() {
-    this.#ingameWin.changePosition(kLoadingLeft, kLoadingTop)
-  }
-
-  #positionNoticesWindow() {
-    const { viewport } = this.#state
-    const { noticesPositionedFor } = this.#persState
+    console.log('positionIngameWindow():', viewport)
 
     if (!viewport) {
       return
     }
 
-    console.log(
-      'positionNoticesWindow():',
-      viewport,
-      noticesPositionedFor
-    )
+    // get scaled viewport size
+    const
+      viewportWidthScaled = viewport.width / viewport.scale,
+      viewportHeightScaled = viewport.height / viewport.scale
 
-    if (
-      noticesPositionedFor &&
-      viewport.hash === noticesPositionedFor.hash
-    ) {
+    let
+      left = viewport.x + (viewportWidthScaled / 2) - (kMainWidth / 2),
+      top = viewport.y + (viewportHeightScaled / 2) - (kMainHeight / 2)
+
+    // make sure ingame window doesn't overlap with loading window
+    left = Math.max(kLoadingLeft + kLoadingWidth + 15, left)
+
+    // get unscaled position
+    left = Math.round(left * viewport.scale)
+    top = Math.round(top * viewport.scale)
+
+    await this.#ingameWin.changeSize(kMainWidth, kMainHeight, false)
+    await this.#ingameWin.changePosition(left, top)
+  }
+
+  async #positionNoticesWindow() {
+    const { viewport } = this.#state
+    const { noticesPositionedFor } = this.#persState
+
+    if (!viewport || viewport.hash === noticesPositionedFor?.hash) {
       return
     }
 
@@ -460,9 +564,14 @@ class BackgroundController {
       left = Math.round(Math.floor(logicalLeft) * viewport.scale),
       top = Math.round(Math.floor(logicalTop) * viewport.scale)
 
-    this.#persState.noticesPositionedFor = viewport
+    await this.#noticesWin.changePosition(left, top)
 
-    this.#noticesWin.changePosition(left, top)
+    this.#persState.noticesPositionedFor = viewport
+  }
+
+  async #positionLoadingWindow() {
+    await this.#loadingWin.changeSize(kLoadingWidth, kLoadingHeight, false)
+    await this.#loadingWin.changePosition(kLoadingLeft, kLoadingTop)
   }
 
   #newToast(toast: Toast) {

@@ -5,10 +5,10 @@ import { PersStoreContext } from '../../hooks/pers-context'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { classNames } from '../../utils'
 
+import './Changelog.scss'
+
 import { Checkbox } from '../Checkbox/Checkbox'
 import { Tip } from '../Tip/Tip'
-
-import './Changelog.scss'
 
 
 export type ChangelogProps = {
@@ -34,7 +34,7 @@ export function Changelog({ className, onClose }: ChangelogProps) {
 
         <Tip
           top="2px"
-          left="210px"
+          left="calc(100% + 8px)"
           position="leftEdge bottom"
           arrowPosition="center bottom"
         >
@@ -65,7 +65,7 @@ export function Changelog({ className, onClose }: ChangelogProps) {
           onChange={setShowChangelog}
         >Don&apos;t show this again</Checkbox>
 
-        <button className="action-close" onClick={onClose}>Close</button>
+        <button className="action-close" onClick={onClose}>Got it</button>
 
         <Tip
           top="28px"
@@ -75,11 +75,11 @@ export function Changelog({ className, onClose }: ChangelogProps) {
         >
           <h6>&quot;Don&apos;t show again&quot; checkbox</h6>
           <p>
-          While dialogs are an effective user interface element and can help you
-          inform the users about critical information, some may find their
-          sudden appearance as interruptive, it&apos;s important to allow them
-          to take an action in an easy way and change the setting to their
-          preference.
+            While dialogs are an effective user interface element and can help
+            you inform the users about critical information, some may find their
+            sudden appearance as interruptive, it&apos;s important to allow them
+            to take an action in an easy way and change the setting to their
+            preference.
           </p>
         </Tip>
       </div>

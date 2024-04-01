@@ -1,8 +1,9 @@
-import { useCallback, useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 
-import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary'
+import './Desktop.scss'
+
 import { DesktopHeader } from '../DesktopHeader/DesktopHeader'
 import { ScreenError } from '../ScreenError/ScreenError'
 import { ScreenMain } from '../ScreenMain/ScreenMain'
@@ -14,25 +15,21 @@ import { Navigation } from '../Navigation/Navigation'
 import { AdPremium } from '../AdPremium/AdPremium'
 import { Popup } from '../Popup/Popup'
 import { Toaster } from '../Toaster/Toaster'
+import { RootWrapper } from '../RootWrapper/RootWrapper'
+import { FTUE } from '../FTUE/FTUE'
 
-import { CommonStoreContext, CommonStoreProvider } from '../../hooks/common-context'
+import { CommonStoreContext } from '../../hooks/common-context'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { classNames } from '../../utils'
 import { kAppPopups, kAppStatus, kAppScreens, kWindowNames } from '../../config/enums'
-import { PersStoreContext, PersStoreProvider } from '../../hooks/pers-context'
-
-import './Desktop.scss'
+import { PersStoreContext } from '../../hooks/pers-context'
 
 
 export function renderDesktop(element: Element | DocumentFragment) {
   createRoot(element).render(
-    <ErrorBoundary name="EBDesktop" className="Desktop">
-      <CommonStoreProvider>
-        <PersStoreProvider>
-          <Desktop />
-        </PersStoreProvider>
-      </CommonStoreProvider>
-    </ErrorBoundary>
+    <RootWrapper name="Desktop" >
+      <Desktop />
+    </RootWrapper>
   )
 }
 
@@ -43,26 +40,26 @@ export type DesktopProps = {
 export function Desktop({ className }: DesktopProps) {
   const eventBus = useEventBus()
 
-  const { showChangelog } = useContext(PersStoreContext)
+  const { showChangelog, ftueSeen } = useContext(PersStoreContext)
 
   const { screen, status } = useContext(CommonStoreContext)
 
-  const renderScreenComponent = useCallback(() => {
+  const ScreenComponent = useMemo(() => {
     if (status === kAppStatus.Error) {
-      return <ScreenError className="desktop-screen" />
+      return ScreenError
     }
 
     switch (screen) {
       case kAppScreens.Main:
-        return <ScreenMain className="desktop-screen" />
+        return ScreenMain
       case kAppScreens.A:
-        return <ScreenA className="desktop-screen" />
+        return ScreenA
       case kAppScreens.B:
-        return <ScreenB className="desktop-screen" />
+        return ScreenB
       case kAppScreens.Settings:
-        return <Settings className="desktop-screen" />
+        return Settings
       case kAppScreens.Premium:
-        return <Premium className="desktop-screen" />
+        return Premium
     }
   }, [screen, status])
 
@@ -76,6 +73,10 @@ export function Desktop({ className }: DesktopProps) {
     eventBus.emit('positionWindow', kWindowNames.desktop)
   }, [eventBus])
 
+  if (!ftueSeen) {
+    return <FTUE />
+  }
+
   return (
     <div className={classNames('Desktop', className)}>
       <DesktopHeader />
@@ -84,14 +85,14 @@ export function Desktop({ className }: DesktopProps) {
 
       <SwitchTransition mode="out-in">
         <CSSTransition
-          key={screen}
+          key={ScreenComponent.name}
           classNames="desktop-screen-fade"
           timeout={150}
           mountOnEnter={true}
           unmountOnExit={true}
           appear={true}
         >
-          {renderScreenComponent()}
+          <ScreenComponent className="desktop-screen" />
         </CSSTransition>
       </SwitchTransition>
 

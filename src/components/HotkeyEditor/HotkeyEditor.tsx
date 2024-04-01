@@ -9,7 +9,9 @@ import './HotkeyEditor.scss'
 
 const kHotkeyUsedErrorPrefix = 'Hotkey is already used by '
 
-function getKeyName(code: number): string {
+const kPlaceholderText = 'Choose key'
+
+const getKeyName = (code: number): string => {
   if (kKeyCodes[code]) {
     return kKeyCodes[code]
   }
@@ -17,7 +19,7 @@ function getKeyName(code: number): string {
   return `Key #${code}`
 }
 
-function isModifierKey(code: number) {
+const isModifierKey = (code: number) => {
   switch (code) {
     case 16:
     case 17:
@@ -34,7 +36,7 @@ function isModifierKey(code: number) {
   return false
 }
 
-function isAltKey(code: number) {
+const isAltKey = (code: number) => {
   switch (code) {
     case 18:
     case 164:
@@ -45,7 +47,7 @@ function isAltKey(code: number) {
   return false
 }
 
-function isCtrlKey(code: number) {
+const isCtrlKey = (code: number) => {
   switch (code) {
     case 17:
     case 162:
@@ -56,7 +58,7 @@ function isCtrlKey(code: number) {
   return false
 }
 
-function isShiftKey(code: number) {
+const isShiftKey = (code: number) => {
   switch (code) {
     case 16:
     case 160:
@@ -67,7 +69,7 @@ function isShiftKey(code: number) {
   return false
 }
 
-function isForbiddenKey(code: number) {
+const isForbiddenKey = (code: number) => {
   switch (code) {
     case 91:
     case 92:
@@ -78,7 +80,12 @@ function isForbiddenKey(code: number) {
   return false
 }
 
-export function HotkeyEditor({ hotkeyName }: { hotkeyName: string }) {
+export type HotkeyEditorProps = {
+  hotkeyName: string
+  className?: string
+}
+
+export function HotkeyEditor({ hotkeyName, className }: HotkeyEditorProps) {
   const editorEl = useRef(null)
 
   const {
@@ -103,7 +110,7 @@ export function HotkeyEditor({ hotkeyName }: { hotkeyName: string }) {
     }
 
     if (!alt && !ctrl && !shift) {
-      return 'Choose key'
+      return kPlaceholderText
     }
 
     const out: string[] = []
@@ -162,14 +169,14 @@ export function HotkeyEditor({ hotkeyName }: { hotkeyName: string }) {
         }
       }, 3000)
     }
-  }, [ctrl, shift, alt, assign, error])
+  }, [ctrl, shift, alt, error, assign])
 
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (!editing) {
-        return
-      }
+    if (!editing) {
+      return
+    }
 
+    const onKeyDown = (e: KeyboardEvent) => {
       e.stopPropagation()
       e.preventDefault()
 
@@ -189,11 +196,7 @@ export function HotkeyEditor({ hotkeyName }: { hotkeyName: string }) {
     }
 
     const onWindowClick = (e: MouseEvent) => {
-      if (
-        editing &&
-        editorEl.current &&
-        !e.composedPath().includes(editorEl.current)
-      ) {
+      if (editorEl.current && !e.composedPath().includes(editorEl.current)) {
         setEditing(false)
       }
     }
@@ -238,7 +241,11 @@ export function HotkeyEditor({ hotkeyName }: { hotkeyName: string }) {
 
   return (
     <div
-      className={classNames('HotkeyEditor', { editing, error: !!error })}
+      className={classNames(
+        'HotkeyEditor',
+        className,
+        { editing, error: !!error, placeholder: keysText === kPlaceholderText }
+      )}
       onClick={resetEditing}
       ref={editorEl}
     >{keysText}</div>

@@ -1,10 +1,10 @@
-import { useState, createElement, AnimationEventHandler, useMemo, ReactNode, useEffect, useId } from 'react'
+import { useState, createElement, AnimationEventHandler, useMemo, ReactNode, useEffect, useId, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import { delay } from 'ow-libs'
 
 import { classNames } from '../../utils'
 
 import './Tip.scss'
-import { delay } from 'ow-libs'
 
 
 type HorizontalPosition =
@@ -29,6 +29,7 @@ type TipProps = {
   width?: string
   position?: `${HorizontalPosition} ${VerticalPosition}`
   arrowPosition?: `${HorizontalPosition} ${VerticalPosition}`
+  clickThrough?: boolean
   className?: string
   children?: ReactNode
 }
@@ -53,6 +54,7 @@ export function Tip({
   width,
   position = 'center bottom',
   arrowPosition: arrowPositionSrc = 'center top',
+  clickThrough = false,
   className = '',
   children
 }: TipProps) {
@@ -72,7 +74,12 @@ export function Tip({
   )
 
   const left = useMemo(() => {
-    if (!areaElement || !tipElement || !tipElement.clientWidth) {
+    if (
+      !areaElement ||
+      !tipElement ||
+      !tipElement.clientWidth ||
+      state === kTipState.Hidden
+    ) {
       return 0
     }
 
@@ -100,10 +107,15 @@ export function Tip({
     }
 
     return Math.max(Math.round(left), 0)
-  }, [areaElement, tipElement, position])
+  }, [areaElement, tipElement, state, position])
 
   const top = useMemo(() => {
-    if (!areaElement || !tipElement || !tipElement.clientHeight) {
+    if (
+      !areaElement ||
+      !tipElement ||
+      !tipElement.clientHeight ||
+      state === kTipState.Hidden
+    ) {
       return 0
     }
 
@@ -131,10 +143,10 @@ export function Tip({
     }
 
     return Math.max(Math.round(top), 0)
-  }, [areaElement, tipElement, position])
+  }, [areaElement, tipElement, state, position])
 
   const arrowLeft = useMemo(() => {
-    if (!areaElement) {
+    if (!areaElement || state === kTipState.Hidden) {
       return 0
     }
 
@@ -162,10 +174,10 @@ export function Tip({
     }
 
     return Math.round(left)
-  }, [areaElement, arrowPosition])
+  }, [areaElement, arrowPosition, state])
 
   const arrowTop = useMemo(() => {
-    if (!areaElement) {
+    if (!areaElement || state === kTipState.Hidden) {
       return 0
     }
 
@@ -193,13 +205,17 @@ export function Tip({
     }
 
     return Math.round(top)
-  }, [areaElement, arrowPosition])
+  }, [areaElement, arrowPosition, state])
 
-  const onAnimationEnd: AnimationEventHandler<HTMLDivElement> = e => {
-    if (e.animationName === 'TipLayer-fade-out') {
+  const onAnimationEnd: AnimationEventHandler<HTMLDivElement> = useCallback(e => {
+    if (
+      state === kTipState.FadingOut &&
+      e.animationName === 'TipLayer-fade-out'
+    ) {
+      // console.log('onAnimationEnd()')
       setState(kTipState.Hidden)
     }
-  }
+  }, [state])
 
   /* const onClick = () => {
     setState(v => {
@@ -213,6 +229,12 @@ export function Tip({
       }
     })
   } */
+
+  const onClick = (e: React.MouseEvent) => {
+    if (!clickThrough) {
+      e.stopPropagation()
+    }
+  }
 
   const onMouseEnter = () => {
     setMouseOver(true)
@@ -252,9 +274,13 @@ export function Tip({
         ref={node => setTipElement(node)}
       >{children}</div>
     </div>
-  ), [state, arrowPosition, arrowLeft, arrowTop, left, top, width, children])
+  ), [onAnimationEnd, state, arrowPosition, arrowLeft, arrowTop, left, top, width, children])
 
   useEffect(() => {
+    if (!mouseOver && state !== kTipState.Shown) {
+      return
+    }
+
     let cancelled = false
 
     const timeout = mouseOver ? 250 : 500
@@ -266,7 +292,7 @@ export function Tip({
 
       if (mouseOver) {
         setState(kTipState.Shown)
-      } else {
+      } else if (state === kTipState.Shown) {
         setState(kTipState.FadingOut)
       }
     })
@@ -274,9 +300,9 @@ export function Tip({
     return () => {
       cancelled = true
     }
-  }, [mouseOver])
+  }, [state, mouseOver])
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (state !== kTipState.Shown || !areaElement) {
       return
     }
@@ -296,13 +322,13 @@ export function Tip({
     return () => {
       document.removeEventListener('click', onClickOutside)
     }
-  }, [areaElement, state])
+  }, [areaElement, state]) */
 
   return createElement(
     'div',
     {
       className: classNames('Tip', className),
-      // onClick,
+      onClick,
       onMouseEnter,
       onMouseLeave,
       ref: node => setAreaElement(node),

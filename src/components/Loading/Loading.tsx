@@ -1,27 +1,22 @@
 import { useContext, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary'
-import { Tip } from '../Tip/Tip'
-import { Ad } from '../Ad/Ad'
-
 import { kAppStatus, kWindowNames } from '../../config/enums'
-import { CommonStoreContext, CommonStoreProvider } from '../../hooks/common-context'
+import { CommonStoreContext } from '../../hooks/common-context'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { classNames } from '../../utils'
-import { PersStoreProvider } from '../../hooks/pers-context'
 
 import './Loading.scss'
 
+import { RootWrapper } from '../RootWrapper/RootWrapper'
+import { Tip } from '../Tip/Tip'
+import { Ad } from '../Ad/Ad'
+
 export function renderLoading(element: Element | DocumentFragment) {
   createRoot(element).render(
-    <ErrorBoundary name="EBLoading" className="Loading">
-      <CommonStoreProvider>
-        <PersStoreProvider>
-          <Loading />
-        </PersStoreProvider>
-      </CommonStoreProvider>
-    </ErrorBoundary>
+    <RootWrapper name="Loading">
+      <Loading />
+    </RootWrapper>
   )
 }
 
@@ -32,7 +27,7 @@ export type LoadingProps = {
 export function Loading({ className }: LoadingProps) {
   const eventBus = useEventBus()
 
-  const { hotkey, status, statsReady, isInMatch } = useContext(CommonStoreContext)
+  const { hotkeyLoading, status, statsReady } = useContext(CommonStoreContext)
 
   const dragMove = (e: React.MouseEvent) => {
     if (e.button === 0) {
@@ -46,6 +41,14 @@ export function Loading({ className }: LoadingProps) {
 
   const close = () => {
     eventBus.emit('closeWindow', kWindowNames.loading)
+  }
+
+  const openDiscord = () => {
+    eventBus.emit('openDiscord')
+  }
+
+  const tryAgain = () => {
+    eventBus.emit('tryAgain')
   }
 
   useEffect(() => {
@@ -77,7 +80,7 @@ export function Loading({ className }: LoadingProps) {
 
   const renderContentReady = () => (
     <div className="content content-ready">
-      <h3>Content is Ready</h3>
+      <h3>Value</h3>
       <p>Builds, tips, jokes, etc.</p>
     </div>
   )
@@ -86,7 +89,7 @@ export function Loading({ className }: LoadingProps) {
     <div className="content content-warning">
       <h3>Title</h3>
       <p>Please click the &quot;Try again&quot; button</p>
-      <button className="action">Try again</button>
+      <button className="action" onClick={tryAgain}>Try again</button>
     </div>
   )
 
@@ -94,11 +97,10 @@ export function Loading({ className }: LoadingProps) {
     <div className="content content-error">
       <h3>App is currently down</h3>
       <p>
-        You can talk to us on
-        <button className="link">Discord</button>
-        straight  from the app once the game ends
+        You can talk to us on {
+          <button className="link" onClick={openDiscord}>Discord</button>
+        } straight from the app once the game ends
       </p>
-      <button className="action">Try again</button>
     </div>
   )
 
@@ -106,37 +108,33 @@ export function Loading({ className }: LoadingProps) {
     <div className={classNames('Loading', className)}>
       <header className="loading-header" onMouseDown={dragMove}>
         <Tip
-          top="20px"
-          left="8px"
+          top="calc(50% - 12px)"
+          left="132px"
           position="leftEdge bottom"
           arrowPosition="center bottom"
         >
-          <h6>App Loading Screen</h6>
+          <h6>App Loading/Companion Screen</h6>
           <p>
-            While playing and using apps, users will often encounter loading
-            times, and creating a solid loading screen can serve your app well.
+            Users frequently experience loading times while using the app.
+            Designing a well crafted loading or companion screen can enhance the
+            user experience while monetizing.
           </p>
           <p>
-            Loading screens are used as a transition between screens and loading
-            is required.
-          </p>
-          <p>
-            While app is loading and processing, you can use the loading screen
-            to show relevant data and content, alongside ads.
-          </p>
-          <p>
-            If your app does not ever wait for user actions, API calls or other
-            time consuming activities, you might not require this screen.
+            Loading screens act as transitions between screens, while companion
+            screens can provide additional value by displaying relevant data,
+            content, alongside the main screen. If your app doesn&apos;t involve
+            waiting for user actions, API calls, or other time-consuming
+            activities, a loading screen may not be necessary.
           </p>
         </Tip>
 
         <div className="hotkey">
-          Show/hide <kbd>{hotkey}</kbd>
+          Show/hide <kbd>{hotkeyLoading}</kbd>
 
           <Tip
-            top="20px"
-            left="calc(50% - 12px)"
-            position="center bottom"
+            top="calc(50% - 12px)"
+            left="calc(100% + 8px)"
+            position="rightEdge bottom"
             arrowPosition="center bottom"
           >
             <h6>Activation Hotkey</h6>
@@ -172,18 +170,16 @@ export function Loading({ className }: LoadingProps) {
         <Tip
           top="8px"
           right="8px"
-          position="rightEdge top"
-          arrowPosition="center top"
+          position="rightEdge bottom"
+          arrowPosition="center bottom"
         >
-          <h6>Loading Screen Ads</h6>
+          <h6>Loading / Companion Screen Ads</h6>
           <p>
-            Advertisements and specifically video ads are the main source of
-            revenues for developers in our platform.
-          </p>
-          <p>
-            Loading screens are ideal for showing ads in a legitimate, positive
-            way, as users also get value in the same screen and cannot start
-            playing or using the app yet in any case.
+            Enhance your app&apos;s profitability without compromising on user
+            experience.
+            Consider incorporating a loading screen or companion screen to the
+            apps main screen, offering additional value and monetization
+            opportunities for your app.
           </p>
         </Tip>
       </Ad>

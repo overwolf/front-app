@@ -1,11 +1,13 @@
 // Variables
 
 :root {
+  --text-text-pure: #fff;
   --text-text-primary: #DFDFDF;
   --text-text-secondary: #DFDFDF;
   --text-text-tertiary: #BFBFBF;
   --dev-console-codes-texts-primary-text-color: #CCC;
   --surface-surface-brand: #D34037;
+  --surface-surface-brand-hover: #F05C48;
   --surface-surface-primary: #202020;
   --surface-surface-secondary: #303030;
   --surface-surface-tertiary: #404040;
@@ -13,6 +15,7 @@
   --surface-surface-tooltip: #606060;
   --icon-icon-primary: #DFDFDF;
   --icon-icon-secondary: #9F9F9F;
+  --border-border-primary: #DFDFDF;
   --border-border-secondary: #9F9F9F;
   --border-border-tertiary: #606060;
   --border-border-quaternary: #303030;
@@ -32,8 +35,7 @@
 }
 
 // Fonts
-
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&display=swap');
 
 // Reset
 

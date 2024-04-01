@@ -82,8 +82,6 @@ const makeOPK = async (distPath: string, suffix = '') => {
 
   const opkExists = await stat(opkPath).catch(() => null)
 
-  console.log('opkExists:', opkExists)
-
   if (opkExists) {
     await unlink(opkPath)
   }
@@ -140,6 +138,7 @@ export class OverwolfWebpackPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.beforeRun.tapPromise(kOWPluginName, async () => {
       if (this.#setVersion && isValidVersionArg(this.#setVersion)) {
+        console.log('Setting package version:', this.#setVersion)
         await updatePackageVersion(this.#setVersion)
       }
     })

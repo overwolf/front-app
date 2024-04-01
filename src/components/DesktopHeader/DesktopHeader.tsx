@@ -1,14 +1,14 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 
 import { CommonStoreContext } from '../../hooks/common-context'
 import { useEventBus } from '../../hooks/use-event-bus'
-import { kAppPopups , kAppStatus, kWindowNames } from '../../config/enums'
-
+import { kAppPopups, kAppStatus, kWindowNames } from '../../config/enums'
 import { classNames } from '../../utils'
 
-import { Tip } from '../Tip/Tip'
-
 import './DesktopHeader.scss'
+
+import { Tip } from '../Tip/Tip'
+import { Link } from '../Link/Link'
 
 
 export type DesktopHeaderProps = {
@@ -55,14 +55,9 @@ export function DesktopHeader({ className }: DesktopHeaderProps) {
           >
             <h6>Yellow State Explained</h6>
             <p>
-              Switch the app to Yellow state when there&apos;s an issue
-              hurting functionality or features, but the core functionality is
-              still working as intended.
-            </p>
-            <p>
-              For example, if your app is mostly about video replays and those
-              are available, but some side stats are missing - switch to
-              Yellow State.
+              Activate the Yellow state when your app encounters issues that
+              impact specific functionalities or features, while the core
+              functions continue to operate as intended.
             </p>
           </Tip>
         </>
@@ -151,8 +146,11 @@ export function DesktopHeader({ className }: DesktopHeaderProps) {
         >
           <h6>Report a Bug</h6>
           <p>
-            We encourage you to allow your users to report bugs in the app in an
-            easy way.
+            We encourage you to add an easy bug reporting within the app.
+            When implemented correctly, this feature can also automatically
+            collect user logs. For more information on users logs and
+            functions, please visit this&nbsp;
+            <Link url="https://overwolf.github.io/tools/developers-console/all-applications/user-logs">link</Link>.
           </p>
         </Tip>
 
@@ -181,6 +179,20 @@ export function DesktopHeader({ className }: DesktopHeaderProps) {
         </Tip>
 
         <button className="window-control help" />
+
+        <Tip
+          top="26px"
+          right="63px"
+          position="rightEdge bottom"
+          arrowPosition="center bottom"
+        >
+          <h6>Information icon</h6>
+          <p>
+            The information icon provides a way to add broader information for
+            your users, such as change logs, expending on the app&apos;s main
+            features, or a FAQ.
+          </p>
+        </Tip>
 
         <div className="help-dropdown">
           <button onClick={openDiscord}>Q&A</button>

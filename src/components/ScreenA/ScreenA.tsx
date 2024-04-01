@@ -56,7 +56,7 @@ export function ScreenA({ className }: ScreenAProps) {
 
         <Tip
           top="10px"
-          left="623px"
+          right="10px"
           position="leftEdge bottom"
           arrowPosition="center bottom"
         >

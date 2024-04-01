@@ -16,6 +16,7 @@ export interface CommonState {
   notices: Notice[]
   toasts: Toast[]
   hotkey: string
+  hotkeyLoading: string
   version: string
 }
 
@@ -31,6 +32,7 @@ export const kCommonStoreDefauts: CommonState = {
   notices: [],
   toasts: [],
   hotkey: '',
+  hotkeyLoading: '',
   version: ''
 }
 

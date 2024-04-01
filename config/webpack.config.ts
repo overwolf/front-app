@@ -3,6 +3,8 @@ import { Configuration } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import autoprefixer from 'autoprefixer'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+// eslint-disable-next-line import/no-unresolved
+import million from 'million/compiler'
 
 import { OverwolfWebpackPlugin } from './overwolf.webpack'
 import { kAppTitle, kBuildPath, kWindowNames } from './constants'
@@ -125,8 +127,13 @@ export const makeConfig = (env: EnvArg): Configuration => {
       ]
     },
     plugins: [
+      million.webpack({
+        auto: true,
+        mute: true
+      }),
       new MiniCssExtractPlugin({
-        filename: 'styles/[name].css'
+        filename: 'styles/[name].[id].css',
+        ignoreOrder: true
       }),
       new OverwolfWebpackPlugin(env),
       ...kWindowNames.map(makeHTMLPlugin)

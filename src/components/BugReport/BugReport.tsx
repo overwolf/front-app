@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { classNames } from '../../utils'
 
-import { Tip } from '../Tip/Tip'
-
 import './BugReport.scss'
+
+import { Tip } from '../Tip/Tip'
 
 
 export type BugReportProps = {

@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { classNames } from '../../utils'
 
-import { Tip } from '../Tip/Tip'
-
 import './Feedback.scss'
+
+import { Tip } from '../Tip/Tip'
 
 
 export type FeedbackProps = {
@@ -57,7 +57,7 @@ export function Feedback({ className, onClose }: FeedbackProps) {
         <input
           className={classNames('text', { invalid: !isContactValid })}
           type="text"
-          placeholder='Email/Discord'
+          placeholder="Email/Discord"
           value={contact}
           onChange={e => setContact(e.target.value)}
         />

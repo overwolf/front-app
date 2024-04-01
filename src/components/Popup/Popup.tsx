@@ -1,14 +1,14 @@
-import { ReactNode, useCallback, useContext, useMemo, useRef } from 'react'
+import { ReactNode, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 
 import { kAppPopups } from '../../config/enums'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { CommonStoreContext } from '../../hooks/common-context'
 
+import './Popup.scss'
+
 import { Changelog } from '../Changelog/Changelog'
 import { Feedback } from '../Feedback/Feedback'
-
-import './Popup.scss'
 import { BugReport } from '../BugReport/BugReport'
 
 
@@ -68,6 +68,22 @@ export function Popup() {
       </div>
     )
   }, [popup, popupContentComponent, onPopupClick, setPopup])
+
+  useEffect(() => {
+    const listener = (e: BeforeUnloadEvent) => {
+      delete e.returnValue
+
+      if (popup !== null) {
+        eventBus.emit('setPopup', null)
+      }
+    }
+
+    window.addEventListener('beforeunload', listener)
+
+    return () => {
+      window.removeEventListener('beforeunload', listener)
+    }
+  }, [eventBus, popup])
 
   return (
     <SwitchTransition mode="out-in">

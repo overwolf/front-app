@@ -22,6 +22,7 @@ export interface EventBusEvents {
   submitFeedback: void
   submitBugReport: void
   closeToast: string
+  setFTUESeen: void
 }
 
 export interface NoticeAction {
@@ -39,8 +40,10 @@ export interface Notice {
 }
 
 export interface GameEventTypes {
-  match_start: void
-  match_end: void
+  'events.match_start': void
+  'events.match_end': void
+  'events.matchStart': void
+  'events.matchEnd': void
 }
 
 export interface Toast {

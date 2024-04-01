@@ -4,7 +4,7 @@ import { kAppScreens, kMatchEndActions } from '../config/enums'
 
 export interface PersState {
   screen: kAppScreens
-  launcherStart: boolean
+  autoLaunch: boolean
   matchStart: boolean
   matchEndAction: kMatchEndActions
   notifications: boolean
@@ -12,18 +12,20 @@ export interface PersState {
   desktopPositionedFor: Viewport | null
   ingamePositionedFor: Viewport | null
   noticesPositionedFor: Viewport | null
+  ftueSeen: boolean
 }
 
 export const kPersStateDefaults: PersState = {
   screen: kAppScreens.Main,
-  launcherStart: true,
+  autoLaunch: true,
   matchStart: true,
   matchEndAction: kMatchEndActions.Show,
   notifications: true,
   showChangelog: true,
   desktopPositionedFor: null,
   ingamePositionedFor: null,
-  noticesPositionedFor: null
+  noticesPositionedFor: null,
+  ftueSeen: false
 }
 
 export const kPersStoreName = 'persistent'

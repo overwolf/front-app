@@ -1,7 +1,4 @@
 .Loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
   height: 100vh;
   padding-bottom: 24px;
@@ -11,8 +8,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     margin-bottom: 24px;
-    width: 100%;
     height: 30px;
     padding-left: 8px;
     background: var(--surface-surface-tertiary);
@@ -21,18 +18,14 @@
       content: '';
       display: block;
       flex: 0 0 auto;
-      width: 24px;
+      width: 116px;
       height: 24px;
-      background: url('../../images/app-logo.svg') no-repeat 0 center;
-      background-size: auto 100%;
+      background: url('../../images/app-logo-narrow.svg') no-repeat 0 center;
       pointer-events: none;
     }
 
     .hotkey {
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
+      position: relative;
       margin: auto;
       width: fit-content;
       line-height: 30px;
@@ -100,9 +93,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto 14px;
     width: 400px;
     height: 193px;
-    padding: 0 24px;
+    padding: 24px;
     color: var(--text-text-secondary, #BFBFBF);
     background-color: var(--surface-surface-secondary, #303030);
     text-align: center;
@@ -122,25 +116,36 @@
       letter-spacing: 0.56px;
     }
 
-    .try-again {
+    .action {
       margin-top: 12px;
       height: 32px;
       line-height: 20px;
       padding: 6px 16px;
+      color: var(--text-text-primary);
+      background-color: var(--surface-surface-quaternary, #505050);
       font-size: 14px;
       font-weight: 600;
       letter-spacing: 0.56px;
+      transition: background-color .15s ease-in-out;
+
+      &:hover {
+        background-color: var(--hover-hover-tertiary);
+      }
     }
 
     .link {
       display: inline-block;
+      position: relative;
+      padding-left: 22px;
       color: var(--text-text-primary, #DFDFDF);
       text-decoration-line: underline;
 
       &::before {
         content: '';
-        display: inline-block;
-        margin-right: 2px;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 20px;
         height: 20px;
         mask: url('../../images/discord.svg') no-repeat center center;
@@ -187,6 +192,6 @@
   }
 
   .loading-ad {
-    margin-top: auto;
+    margin: 0 auto;
   }
 }

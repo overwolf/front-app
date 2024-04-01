@@ -5,7 +5,7 @@
   width: 200px;
   height: 32px;
   line-height: 30px;
-  color: var(--text-text-tertiary);
+  color: var(--text-text-primary, #DFDFDF);
   font-size: 14px;
   letter-spacing: 0.56px;
 
@@ -38,17 +38,16 @@
     border: 1px solid var(--border-border-tertiary);
     background: var(--surface-surface-secondary);
     cursor: pointer;
-    transition: background-color .15s ease-in-out;
+    transition: border-color .15s ease-in-out;
 
     &:hover {
-      color: var(--text-text-primary);
-      background: var(--hover-hover-secondary-dark);
+      border-color: var(--border-border-primary);
     }
   }
 
   .options {
     position: absolute;
-    top: 100%;
+    top: calc(100% - 1px);
     left: 0;
     right: 0;
     z-index: 200;
@@ -94,13 +93,12 @@
       color .15s ease-in-out,
       background-color .15s ease-in-out;
 
-    &:hover {
-      color: var(--text-text-primary);
-      background: var(--hover-hover-secondary-dark);
-    }
-
     &.chosen {
       background: url('../../images/check.svg') right 9px center no-repeat;
+    }
+
+    &:hover {
+      background-color: var(--hover-hover-secondary-dark);
     }
 
     &:not(:last-child) {

@@ -1,20 +1,21 @@
 import { useContext } from 'react'
 
-import { Tip } from '../Tip/Tip'
-import { Switch } from '../Switch/Switch'
-import { DropDown, DropDownOption } from '../DropDown/DropDown'
-import { HotkeyEditor } from '../HotkeyEditor/HotkeyEditor'
-
 import { classNames } from '../../utils'
 import { PersStoreContext } from '../../hooks/pers-context'
 import { PersState } from '../../store/pers'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { kMatchEndActions } from '../../config/enums'
+import { kHotkeyApp, kHotkeyLoading } from '../../config/constants'
+import { CommonStoreContext } from '../../hooks/common-context'
 
 import './Settings.scss'
-import { kHotkey } from '../../config/constants'
-import { CommonStoreContext } from '../../hooks/common-context'
+
+import { Tip } from '../Tip/Tip'
+import { Switch } from '../Switch/Switch'
+import { DropDown, DropDownOption } from '../DropDown/DropDown'
+import { HotkeyEditor } from '../HotkeyEditor/HotkeyEditor'
 import { ToolTip } from '../ToolTip/ToolTip'
+import { Link } from '../Link/Link'
 
 
 export type SettingsProps = {
@@ -38,7 +39,7 @@ export function Settings({ className }: SettingsProps) {
   const { version } = useContext(CommonStoreContext)
 
   const {
-    launcherStart,
+    autoLaunch,
     matchStart,
     matchEndAction,
     notifications
@@ -48,7 +49,7 @@ export function Settings({ className }: SettingsProps) {
     key: T,
     value: PersState[T]
   ) => {
-    eventBus.emit('setSetting', [ key, value ])
+    eventBus.emit('setSetting', [key, value])
   }
 
   return (
@@ -99,10 +100,10 @@ export function Settings({ className }: SettingsProps) {
 
         <Switch
           className="setting-field"
-          value={launcherStart}
-          onChange={v => setSetting('launcherStart', v)}
+          value={autoLaunch}
+          onChange={v => setSetting('autoLaunch', v)}
         >
-          Auto launch with the game launcher
+          Auto launch when the game starts
         </Switch>
 
         <Switch
@@ -166,7 +167,7 @@ export function Settings({ className }: SettingsProps) {
 
         <div className="setting-field setting-field-hotkey">
           Show/Hide App
-          <HotkeyEditor hotkeyName={kHotkey} />
+          <HotkeyEditor hotkeyName={kHotkeyApp} />
 
           <Tip
             top="4px"
@@ -186,9 +187,15 @@ export function Settings({ className }: SettingsProps) {
             </p>
             <p>
               For detailed instructions on setting hotkeys for your app, please
-              refer to this link.
+              refer to this&nbsp;
+              <Link url="https://overwolf.github.io/topics/best-practices/hotkeys-best-practices">link</Link>.
             </p>
           </Tip>
+        </div>
+
+        <div className="setting-field setting-field-hotkey">
+          Show/Hide loading screen
+          <HotkeyEditor hotkeyName={kHotkeyLoading} />
         </div>
 
         <div className="setting-version">

@@ -1,4 +1,4 @@
-import { useState, createElement, AnimationEventHandler, useMemo, ReactNode, useId, useEffect } from 'react'
+import { useState, createElement, AnimationEventHandler, useMemo, ReactNode, useId } from 'react'
 import { createPortal } from 'react-dom'
 
 import { classNames } from '../../utils'
@@ -69,7 +69,12 @@ export function ToolTip({
   )
 
   const left = useMemo(() => {
-    if (!areaElement || !tipElement || !tipElement.clientWidth) {
+    if (
+      !areaElement ||
+      !tipElement ||
+      !tipElement.clientWidth ||
+      state === kToolTipState.Hidden
+    ) {
       return 0
     }
 
@@ -97,10 +102,15 @@ export function ToolTip({
     }
 
     return Math.max(Math.round(left), 0)
-  }, [areaElement, tipElement, position])
+  }, [areaElement, tipElement, state, position])
 
   const top = useMemo(() => {
-    if (!areaElement || !tipElement || !tipElement.clientHeight) {
+    if (
+      !areaElement ||
+      !tipElement ||
+      !tipElement.clientHeight ||
+      state === kToolTipState.Hidden
+    ) {
       return 0
     }
 
@@ -128,10 +138,10 @@ export function ToolTip({
     }
 
     return Math.max(Math.round(top), 0)
-  }, [areaElement, tipElement, position])
+  }, [areaElement, tipElement, state, position])
 
   const arrowLeft = useMemo(() => {
-    if (!areaElement) {
+    if (!areaElement || state === kToolTipState.Hidden) {
       return 0
     }
 
@@ -159,10 +169,10 @@ export function ToolTip({
     }
 
     return Math.round(left)
-  }, [areaElement, arrowPosition])
+  }, [areaElement, arrowPosition, state])
 
   const arrowTop = useMemo(() => {
-    if (!areaElement) {
+    if (!areaElement || state === kToolTipState.Hidden) {
       return 0
     }
 
@@ -190,7 +200,7 @@ export function ToolTip({
     }
 
     return Math.round(top)
-  }, [areaElement, arrowPosition])
+  }, [areaElement, arrowPosition, state])
 
   const onAnimationEnd: AnimationEventHandler<HTMLDivElement> = e => {
     if (e.animationName === 'ToolTipLayer-fade-out') {

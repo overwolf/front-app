@@ -84,7 +84,6 @@
         width: 120px;
         height: 4px;
         background: var(--surface-surface-primary, #202020);
-        border-radius: 4px;
       }
 
       .fill {
@@ -159,14 +158,12 @@
         width: 120px;
         height: 4px;
         background: var(--surface-surface-primary);
-        border-radius: 4px;
       }
 
       .fill {
         width: 0;
         height: 4px;
         background: var(--icon-icon-secondary, #9F9F9F);
-        border-radius: 4px;
       }
     }
   }

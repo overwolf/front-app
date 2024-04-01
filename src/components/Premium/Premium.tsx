@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
 import { classNames } from '../../utils'
-import { Tip } from '../Tip/Tip'
 
 import './Premium.scss'
+
+import { Tip } from '../Tip/Tip'
+import { Link } from '../Link/Link'
 
 
 export type PremiumProps = {
@@ -44,7 +46,8 @@ export function Premium({ className }: PremiumProps) {
               users. Calculate the premium plan&apos;s value based on the
               user&apos;s worth, particularly focusing on US users. For further
               guidance on setting up subscriptions and more recommendations,
-              please visit this link.
+              please visit this&nbsp;
+              <Link url="https://overwolf.github.io/start/monetize-your-app/subscriptions">link</Link>.
             </p>
           </Tip>
         </h2>

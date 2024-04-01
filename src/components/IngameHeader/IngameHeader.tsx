@@ -3,12 +3,11 @@ import { useContext, useRef } from 'react'
 import { CommonStoreContext } from '../../hooks/common-context'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { kAppPopups, kWindowNames } from '../../config/enums'
-
 import { classNames } from '../../utils'
 
-import { Tip } from '../Tip/Tip'
-
 import './IngameHeader.scss'
+
+import { Tip } from '../Tip/Tip'
 
 
 export type IngameHeaderProps = {
@@ -64,6 +63,26 @@ export function IngameHeader({ className }: IngameHeaderProps) {
 
       <div className="hotkey">
         Show/hide <kbd>{hotkey}</kbd>
+
+        <Tip
+          top="calc(50% - 12px)"
+          left="calc(100% + 10px)"
+          position="center bottom"
+          arrowPosition="center bottom"
+        >
+          <h6>Activation Hotkey</h6>
+          <p>
+            It&apos;s important to keep reminding your users about the hotkey
+            combos assigned to the app&apos;s main functions, such as in-game
+            show/hide of the app.
+          </p>
+          <p>
+            This requirement is even more important if your app is for FPS or
+            other genres in which there&apos;s no mouse cursor visible on
+            screen during the game, and hotkeys are the only way to use those
+            functions.
+          </p>
+        </Tip>
       </div>
 
       <div className="window-controls">

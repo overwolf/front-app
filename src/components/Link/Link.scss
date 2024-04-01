@@ -1,0 +1,11 @@
+.Link {
+  display: inline;
+  color: var(--text-text-primary);
+  text-decoration-line: underline;
+  cursor: pointer;
+  transition: color 150ms ease-in-out;
+
+  &:hover {
+    color: #fff;
+  }
+}

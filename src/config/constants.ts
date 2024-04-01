@@ -3,7 +3,8 @@ import { Notice, Toast } from './types'
 
 export const kDevMode = (process.env.NODE_ENV !== 'production')
 
-export const kHotkey = 'toggle-front-app'
+export const kHotkeyApp = 'toggle-front-app'
+export const kHotkeyLoading = 'toggle-front-app-loading'
 
 export const kHotkeyServiceName = 'HotkeyService'
 export const kEventBusName = 'EventBus'
@@ -13,19 +14,25 @@ export const kDefaultLocale = 'en-GB'
 export const kDiscordUrl = 'https://discord.gg/overwolf-developers'
 
 export const kGameFeatures = [
-  'match_info'
+  'match_info',
+  'match'
 ]
 
 export const kLeagueLauncherId = 10902
 export const kLeagueGameId = 5426
+
+export const kMainWidth = 1212
+export const kMainHeight = 660
 
 export const kNoticesWidth = 500
 export const kNoticesHeight = 800
 
 export const kLoadingLeft = 40
 export const kLoadingTop = 200
+export const kLoadingWidth = 480
+export const kLoadingHeight = 585
 
-export const kNoticeDefaultTimeout = 7000
+export const kNoticeDefaultTimeout = 60 * 1000
 
 export const kNoticeError: Notice = {
   id: 'notice-error',

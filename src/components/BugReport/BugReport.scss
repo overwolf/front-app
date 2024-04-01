@@ -37,9 +37,15 @@
     border: 1px solid var(--border-border-tertiary);
     background: var(--surface-surface-secondary);
     color: var(--text-text-primary);
+    caret-color: var(--surface-surface-brand);
     font-size: 14px;
     letter-spacing: 0.56px;
     transition: all 150ms ease-in-out;
+
+    &:hover,
+    &:focus {
+      border-color: var(--border-border-primary);
+    }
 
     &::placeholder {
       color: #9F9F9F;

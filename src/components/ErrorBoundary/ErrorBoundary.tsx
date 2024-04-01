@@ -11,7 +11,7 @@ export type ErrorBoundaryProps = {
 }
 
 type ErrorBoundaryError = {
-  error: Error
+  error: any
   componentStack?: string
 }
 

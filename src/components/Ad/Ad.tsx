@@ -13,7 +13,7 @@ export type AdProps = {
 export function Ad({ className, children }: AdProps) {
   return (
     <div className={classNames('Ad', className)}>
-      Video ad Playing<br />
+      Ad container<br />
       400x300
       {children}
     </div>

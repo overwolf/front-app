@@ -1,30 +1,25 @@
 import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary'
+import { classNames } from '../../utils'
+import { kWindowNames } from '../../config/enums'
+import { useEventBus } from '../../hooks/use-event-bus'
+
+import './Ingame.scss'
+
 import { Ad } from '../Ad/Ad'
 import { Tip } from '../Tip/Tip'
 import { IngameHeader } from '../IngameHeader/IngameHeader'
 import { Popup } from '../Popup/Popup'
 import { Toaster } from '../Toaster/Toaster'
-
-import { classNames } from '../../utils'
-import { kWindowNames } from '../../config/enums'
-import { useEventBus } from '../../hooks/use-event-bus'
-import { CommonStoreProvider } from '../../hooks/common-context'
-import { PersStoreProvider } from '../../hooks/pers-context'
-
-import './Ingame.scss'
+import { RootWrapper } from '../RootWrapper/RootWrapper'
+import { Link } from '../Link/Link'
 
 export function renderIngame(element: Element | DocumentFragment) {
   createRoot(element).render(
-    <ErrorBoundary name="EBIngame" className="Ingame">
-      <CommonStoreProvider>
-        <PersStoreProvider>
-          <Ingame />
-        </PersStoreProvider>
-      </CommonStoreProvider>
-    </ErrorBoundary>
+    <RootWrapper name="Ingame">
+      <Ingame />
+    </RootWrapper>
   )
 }
 
@@ -78,10 +73,10 @@ export function Ingame({ className }: IngameProps) {
           >
             <h6>Additional Value</h6>
             <p>
-            While users browse for the primary content, a snap view or summary
-            of their profile or key indicators can be added to enrich their
-            experience. You can also add short tips, jokes, game-specific advice
-            or any other valuable information your users will like.
+              While users browse for the primary content, a snap view or summary
+              of their profile or key indicators can be added to enrich their
+              experience. You can also add short tips, jokes, game-specific advice
+              or any other valuable information your users will like.
             </p>
           </Tip>
         </aside>
@@ -99,8 +94,8 @@ export function Ingame({ className }: IngameProps) {
             Ads are the primary revenue source on our platform. Incorporating
             ads seamlessly into various app screens to maximize your
             monetization potential without compromising the user experience.
-            For additional ad layouts and recommendations, please visit this
-            link.
+            For additional ad layouts and recommendations, please visit this&nbsp;
+            <Link url="https://overwolf.github.io/start/monetize-your-app/advertising/recommended-ads-layouts">link</Link>.
           </p>
         </Tip>
       </Ad>

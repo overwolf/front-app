@@ -1,4 +1,5 @@
 import { Tip } from '../Tip/Tip'
+import { Link } from '../Link/Link'
 
 import { classNames } from '../../utils'
 
@@ -29,9 +30,10 @@ export function ScreenB({ className }: ScreenBProps) {
           >
             <h6>Video Content Example</h6>
             <p>
-              If your app captures highlights or replays, make sure it is has
+              If your app captures highlights or replays, make sure it has
               customized functionality to fit your users needs.
             </p>
+
             <p>
               Common examples include turning recording on or off, setting
               quality parameters, changing where videos are saved and other
@@ -65,7 +67,9 @@ export function ScreenB({ className }: ScreenBProps) {
           </p>
           <p>
             For more information about the Overwolf media replays API please
-            visit the following link.
+            visit the following&nbsp;
+            <Link url="https://overwolf.github.io/api/media/replays">link</Link>
+            .
           </p>
         </Tip>
       </div>

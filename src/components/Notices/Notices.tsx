@@ -3,26 +3,21 @@ import { createRoot } from 'react-dom/client'
 import { delay } from 'ow-libs'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
-import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary'
-import { SingleNotice } from '../SingleNotice/SingleNotice'
-
 import { useEventBus } from '../../hooks/use-event-bus'
-import { CommonStoreContext, CommonStoreProvider } from '../../hooks/common-context'
+import { CommonStoreContext } from '../../hooks/common-context'
 import { kWindowNames } from '../../config/enums'
 import { classNames } from '../../utils'
-import { PersStoreProvider } from '../../hooks/pers-context'
 
 import './Notices.scss'
 
+import { RootWrapper } from '../RootWrapper/RootWrapper'
+import { SingleNotice } from '../SingleNotice/SingleNotice'
+
 export function renderNotices(element: Element | DocumentFragment) {
   createRoot(element).render(
-    <ErrorBoundary name="EBNotices" className="Notices">
-      <CommonStoreProvider>
-        <PersStoreProvider>
-          <Notices />
-        </PersStoreProvider>
-      </CommonStoreProvider>
-    </ErrorBoundary>
+    <RootWrapper name="Notices">
+      <Notices />
+    </RootWrapper>
   )
 }
 

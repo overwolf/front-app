@@ -5,11 +5,10 @@ import { CommonStoreContext } from '../../hooks/common-context'
 import { useEventBus } from '../../hooks/use-event-bus'
 import { Toast } from '../../config/types'
 import { classNames } from '../../utils'
-import { kNoticeDefaultTimeout } from '../../config/constants'
-
-import { Tip } from '../Tip/Tip'
 
 import './Toaster.scss'
+
+import { Tip } from '../Tip/Tip'
 
 
 export type ToasterProps = {
@@ -30,11 +29,11 @@ function ToastItem({ toast }: ToastItemProps) {
   }, [eventBus, toast])
 
   useEffect(() => {
-    if (mouseOver) {
+    if (mouseOver || toast.timeout === undefined) {
       return
     }
 
-    const handle = setTimeout(close, toast.timeout ?? kNoticeDefaultTimeout)
+    const handle = setTimeout(close, toast.timeout)
 
     return () => clearTimeout(handle)
   }, [close, mouseOver, toast.timeout])
@@ -59,7 +58,7 @@ function ToastItem({ toast }: ToastItemProps) {
 
       <Tip
         top="calc(50% - 12px)"
-        right="50px"
+        right="56px"
         position="center top"
         arrowPosition="center top"
       >{tipContent}</Tip>
