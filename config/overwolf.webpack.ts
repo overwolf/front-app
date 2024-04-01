@@ -77,7 +77,7 @@ const makeOPK = async (distPath: string, suffix = '') => {
 
   const opkPath = path.join(
     kProjectPath,
-    `builds/${manifest.meta.name}-${version}${dotSuffix}.opk`
+    `dist/${manifest.meta.name}-${version}${dotSuffix}.opk`
   )
 
   const opkExists = await stat(opkPath).catch(() => null)
